@@ -52,8 +52,108 @@ Bước 2: Tìm các bài đăng và email được lưu trữ của quản tr�
                   site:juice-shop.herokuapp.com intext:@
                   site:juice-shop.herokuapp.com admin
 - Kết quả ta thu được được file access.log.2025-08-04 và audit.json:
-
+      + Các dòng log POST /rest/user/login trả HTTP 200 OK cho ta biết được
+| # | Email                | Vai trò (theo mặc định Juice Shop)        |
+|---|----------------------|--------------------------------------------|
+| 1 | `admin@juice-sh.op`  | **Admin (quản trị viên chính)**           |
+| 2 | `jim@juice-sh.op`    | Nhân viên (customer support)              |
+| 3 | `bender@juice-sh.op` | Nhân viên (bot / tester)                  |
+| 4 | `ciso@juice-sh.op`   | Chief Information Security Officer (CISO) |
+| 5 | `emma@juice-sh.op`   | Nhân viên (customer support)              |
+      + 
 Bước 3: Tìm quy trình đăng nhập và định dạng tên người dùng:
 Bước 4: Tìm tên người dùng, mật khẩu và khóa riêng tư:
 Bước 5: Tìm tệp cấu hình dịch vụ đám mây hoặc của bên thứ ba
 Bước 6: Tìm tiết lộ nội dung thông báo lỗi và phát triển, thử nghiệm, Kiểm tra chấp nhận của người dùng (UAT) và phiên bản dàn dựng của các trang web.
+2.2.2 Máy chủ web vân tay
+2.2.2.1 Mục tiêu kiểm tra: Xác định phiên bản và loại máy chủ web đang chạy để có thể phát hiện thêm bất kỳ lỗ hổng bảo mật nào đã biết
+2.2.2.2 Các bước thực hiện:
+Bước 1: Sử dụng netcat
+      + nc testphp.vulnweb.com 80 HEAD / HTTP/1.0
+HTTP/1.1 200 OK
+Server: nginx/1.19.0
+Date: Mon, 04 Aug 2025 07:28:28 GMT
+Content-Type: text/html; charset=UTF-8
+Connection: close
+X-Powered-By: PHP/5.6.40-38+ubuntu20.04.1+deb.sury.org+1
+      + nc testphp.vulnweb.com 80 DELETE / HTTP/1.0
+HTTP/1.1 405 Not Allowed
+Server: nginx/1.19.0
+Date: Mon, 04 Aug 2025 07:37:44 GMT
+Content-Type: text/html
+Content-Length: 157
+Connection: close
+
+<html>
+<head><title>405 Not Allowed</title></head>
+<body>
+<center><h1>405 Not Allowed</h1></center>
+<hr><center>nginx/1.19.0</center>
+</body>
+</html>
+      + nc testphp.vulnweb.com 80 GET / HTTP/3.0
+
+HTTP/1.1 505 HTTP Version Not Supported
+Server: nginx/1.19.0
+Date: Mon, 04 Aug 2025 07:43:55 GMT
+Content-Type: text/html
+Content-Length: 187
+Connection: close
+
+<html>
+<head><title>505 HTTP Version Not Supported</title></head>
+<body>
+<center><h1>505 HTTP Version Not Supported</h1></center>
+<hr><center>nginx/1.19.0</center>
+</body>
+</html>
+- Từ kết quả đó:
+      + Máy chủ web testphp.vulnweb.com đang sử dụng nginx phiên bản 1.19.0, một phiên bản đã cũ được phát hành từ năm 2020. Trang web này chạy trên nền tảng PHP 5.6.40, là phiên bản đã hết vòng đời và không còn được cập nhật bảo mật, tiềm ẩn nhiều rủi ro.
+      + Máy chủ hỗ trợ các giao thức HTTP/1.0 và HTTP/1.1, nhưng không hỗ trợ HTTP/3.0, dẫn đến lỗi 505 HTTP Version Not Supported nếu gửi yêu cầu với phiên bản đó. Ngoài ra, phương thức HTTP DELETE bị chặn, phản hồi mã lỗi 405 Not Allowed, cho thấy cấu hình server đã hạn chế các phương thức nguy hiểm.
+      + Từ các thông tin này, có thể thấy hệ thống đang sử dụng công nghệ cũ và chưa được cập nhật, cần được xem xét nâng cấp để đảm bảo an toàn và hiệu năng hoạt động.
+Bước 2: Sử dụng công cụ quét tự động: Netcraft , một công cụ trực tuyến quét các trang web để tìm thông tin, bao gồm cả máy chủ web.
+- Máy chủ & Hạ tầng lưu trữ:
+      + Hệ điều hành (OS): Debian Linux
+      + Hạ tầng đám mây (Cloud): Amazon Web Services EC2 (Elastic Compute Cloud) 
+      + Địa chỉ IP: 44.228.249.3
+      + ASN (Autonomous System Number): AS16509 (Amazon.com, Inc.)
+      + Reverse DNS: ec2-44-228-249-3.us-west-2.compute.amazonaws.com
+      + Vị trí server: US West (Oregon) datacenter
+- Công nghệ máy chủ (Server-Side Technology)
+      + PHP Enabled: Server hỗ trợ và đang chạy PHP
+      + Doctype: HTML (Document Type Declaration)
+      + Character Encoding: ISO-8859-2 (Eastern European Latin)
+      + HTTP Compression: Gzip Content Encoding
+      + SSL/TLS: Không hỗ trợ HTTPS (chỉ HTTP) – có thể bị sniffing, MITM
+- Công nghệ phía client (Client-Side Technology)
+      + Adobe Flash: Công nghệ cũ, tiềm ẩn nhiều lỗ hổng bảo mật (RCE)
+      + JavaScript: Được sử dụng để tạo nội dung động trên website
+- Cấu hình bảo mật liên quan (Email & Policy)
+      + SPF Record: Không có (dễ bị giả mạo email – phishing)
+      + DMARC Record: Không có (không kiểm soát xác thực email)
+- Các thông tin khác
+      + Hosting company: Amazon - US West (Oregon) datacenter
+      + Registrar: eurodns.com
+      + Nameserver: ns1.eurodns.com
+      + Tổ chức vận hành: Acunetix Limited (Malta)
+      + Site title: Home of Acunetix Art
+      + Primary Language: English
+2.2.2.3 Cách khắc phục
+- Che giấu thông tin máy chủ web trong tiêu đề, chẳng hạn như với mô-đun mod_headers của Apache.
+- Sử dụng máy chủ proxy ngược được tăng cường để tạo thêm một lớp bảo mật giữa máy chủ web và Internet.
+- Đảm bảo máy chủ web luôn được cập nhật phần mềm và bản vá bảo mật mới nhất.
+2.2.3 Kiểm tra các tệp siêu dữ liệu của máy chủ web để tìm rò rỉ thông tin
+2.2.3.1 Mục tiêu kiểm tra
+- Xác định các đường dẫn và chức năng ẩn hoặc bị che khuất thông qua việc phân tích các tệp siêu dữ liệu.
+- Trích xuất và lập bản đồ các thông tin khác có thể giúp hiểu rõ hơn về các hệ thống hiện có.
+2.2.3.2 Các bước thực hiện:
+Bước 1: Dùng Robots.txt: juice-shop.herokuapp.com/robots.txt
+ Kết quả: 
+          User-agent: *
+          Disallow: /ftp
+- User-agent: *: Áp dụng cho tất cả bot tìm kiếm.
+- Disallow: /ftp: Cấm bot truy cập thư mục /ftp
+- /ftp có thể chứa dữ liệu nhạy cảm (backup, mật khẩu, file cấu hình...).
+- Là gợi ý tiềm năng cho hacker trong môi trường Juice Shop (mô phỏng lỗ hổng bảo mật).
+- Cần kiểm tra truy cập trực tiếp hoặc quét thư mục để tìm file ẩn.
+- Truy cập trực tiếp: https://juice-shop.herokuapp.com/ftp
