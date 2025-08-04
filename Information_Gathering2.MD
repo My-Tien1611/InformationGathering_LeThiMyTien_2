@@ -230,5 +230,5 @@ vulnweb.com name server ns4.eurodns.com.
 - Thu thập các tệp JavaScript và xem xét mã JS để hiểu rõ hơn về ứng dụng và tìm ra bất kỳ thông tin rò rỉ nào.
 - Xác định xem có tồn tại tệp bản đồ nguồn hoặc tệp gỡ lỗi giao diện khác không.
 2.2.5.3 Các bước thực hiện: Dùng BurpSuite
-Trang web công khai username: test và password: test mặc định → rất dễ bị khai thác.
-![image alt]()
+- Trang web công khai username: test và password: test mặc định → rất dễ bị khai thác.
+![image alt](https://github.com/My-Tien1611/InformationGathering_LeThiMyTien_2/blob/ca53c7ed3b6bc641fd20b4908ec541c052617c85/Thongttindn.jpg)
