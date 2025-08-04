@@ -38,4 +38,4 @@ Bước 1: Tìm sơ đồ và cấu hình mạng
       + Kiến trúc mạng của họ dựa vào phân tán nội dung đến gần người dùng, sử dụng máy chủ chuyên dụng và cơ chế điều phối thông minh.
       + Các tài liệu public giúp hiểu cách thức triển khai và vận hành CDN của Netflix, nhưng không tiết lộ thông tin nhạy cảm.
 - Thu thập subdomain → giúp hình dung cấu trúc hệ thống.
-- 
+![image alt](https://github.com/My-Tien1611/InformationGathering_LeThiMyTien_2/blob/09718a7a70eaef5bd2084b686b65942c05b6fd69/SubdomainsNetflix.jpg)
