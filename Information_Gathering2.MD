@@ -240,4 +240,5 @@ Tệp JavaScript, form POST, endpoint -> Quan trọng để thực hiện tấn 
 2.2.6.1 Mục tiêu kiểm tra: Xác định các điểm xâm nhập và điểm tiêm nhiễm có thể xảy ra thông qua phân tích yêu cầu và phản hồi.
 2.2.6.2 Các bước thực hiện
 Bước 1: Xác định phương thức GET và POST khi nào được sử dụng
-
+![image alt](https://github.com/My-Tien1611/InformationGathering_LeThiMyTien_2/blob/d84204b6e8d3a136f5f614319c41ecc13af8ebe9/POST.jpg)
+![image alt]()
