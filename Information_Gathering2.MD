@@ -15,7 +15,6 @@ Trong trường hợp này, ứng dụng hiển thị hai điểm truy cập (th
 2.2.1 Thực hiện trinh sát phát hiện rò rỉ thông tin bằng công cụ tìm kiếm:
 2.2.1.1 Mục tiêu kiểm tra: Xác định thông tin thiết kế và cấu hình nhạy cảm nào của ứng dụng, hệ thống hoặc tổ chức được tiết lộ trực tiếp (trên trang web của tổ chức) hoặc gián tiếp (thông qua dịch vụ của bên thứ ba).
 2.2.1.2 Các bước thực hiện:
-Bước 1: Tìm sơ đồ và cấu hình mạng
 - Công cụ thực hiện: Shodan, Google Dorks, dnsdumpster
 - Gõ các truy vấn như để tìm host liên quan đến Neflix: 
                         hostname:"netflix.com"
@@ -46,8 +45,6 @@ Bước 1: Tìm sơ đồ và cấu hình mạng
       + Bảo mật & Proxy: Dùng HTTPS, reverse proxy (Nginx, Envoy) và các lớp bảo mật nhiều tầng.
       + Cấu trúc domain phản ánh dịch vụ: Các subdomain cho thấy dịch vụ quảng cáo, API nội bộ, cảnh báo, DVD, thử nghiệm,…
 => Kiến trúc này giúp Netflix đạt hiệu suất cao, khả năng mở rộng và an toàn toàn cầu.
-Bước 2: Tìm các bài đăng và email được lưu trữ của quản trị viên hoặc nhân viên chủ chốt khác
-- Công cụ thực hiện : Google Dorking
 - Các truy vấn để tìm thông tin rò rỉ trên web: 
                   site:juice-shop.herokuapp.com intext:@
                   site:juice-shop.herokuapp.com admin
@@ -60,11 +57,9 @@ Bước 2: Tìm các bài đăng và email được lưu trữ của quản tr�
 | 3 | `bender@juice-sh.op` | Nhân viên (bot / tester)                  |
 | 4 | `ciso@juice-sh.op`   | Chief Information Security Officer (CISO) |
 | 5 | `emma@juice-sh.op`   | Nhân viên (customer support)              |
-      + 
-Bước 3: Tìm quy trình đăng nhập và định dạng tên người dùng:
-Bước 4: Tìm tên người dùng, mật khẩu và khóa riêng tư:
-Bước 5: Tìm tệp cấu hình dịch vụ đám mây hoặc của bên thứ ba
-Bước 6: Tìm tiết lộ nội dung thông báo lỗi và phát triển, thử nghiệm, Kiểm tra chấp nhận của người dùng (UAT) và phiên bản dàn dựng của các trang web.
+2.2.1.3 Cách khắc phục 
+- Hãy cân nhắc cẩn thận về tính nhạy cảm của thông tin thiết kế và cấu hình trước khi đăng trực tuyến.
+- Định kỳ xem xét độ nhạy của thông tin thiết kế và cấu hình hiện có được đăng trực tuyến.
 2.2.2 Máy chủ web vân tay
 2.2.2.1 Mục tiêu kiểm tra: Xác định phiên bản và loại máy chủ web đang chạy để có thể phát hiện thêm bất kỳ lỗ hổng bảo mật nào đã biết
 2.2.2.2 Các bước thực hiện:
@@ -167,6 +162,67 @@ Bước 1: Dùng Robots.txt: juice-shop.herokuapp.com/robots.txt
       + announcement_encrypted.md, encrypt.pyc: Gợi ý có mã hóa hoặc thông báo ẩn.
       + coupons_2013.md.bak: Có thể chứa mã giảm giá hoặc thông tin nhạy cảm từ quá khứ.
       + Thư mục quarantine/: Thường dùng chứa file nghi ngờ/phát hiện có vấn đề.
-
+Bước 2: Dùng Burpsuite:
+2.2.4 Liệt kê các ứng dụng trên máy chủ web
+2.2.4.1 Mục tiêu kiểm tra: Liệt kê các ứng dụng trong phạm vi tồn tại trên máy chủ web.
+2.2.4.2 Các bước kiểm tra
+Bước 1: Liệt kê ứng dụng bằng Nmap: nmap testphp.vulnweb.com
+Starting Nmap 7.93 ( https://nmap.org ) at 2025-08-04 12:09 EDT
+Nmap scan report for testphp.vulnweb.com (44.228.249.3)
+Host is up (0.20s latency).
+rDNS record for 44.228.249.3: 3.249.228.44.in-addr.arpa
+Not shown: 999 filtered tcp ports (no-response)
+PORT   STATE SERVICE
+80/tcp open  http
+Nmap done: 1 IP address (1 host up) scanned in 56.69 seconds
+- Kết quả cho thấy:
+      + Hệ thống chỉ để mở một cổng duy nhất (80), có vẻ như đang cố tình giới hạn bề mặt tấn công.
+      + Tuy nhiên, việc sử dụng HTTP không mã hóa (thay vì HTTPS) có thể là điểm yếu, vì dữ liệu truyền đi có thể bị sniff hoặc MITM tấn công.
+- Hiển thị banner dịch vụ: nmap -sV testphp.vulnweb.com
+Starting Nmap 7.93 ( https://nmap.org ) at 2025-08-04 12:11 EDT
+Nmap scan report for testphp.vulnweb.com (44.228.249.3)
+Host is up (0.21s latency).
+rDNS record for 44.228.249.3: ec2-44-228-249-3.us-west-2.compute.amazonaws.com
+Not shown: 999 filtered tcp ports (no-response)
+PORT   STATE SERVICE    VERSION
+80/tcp open  tcpwrapped
+- Kết quả nhận được: Không hiển thị banner HTTP, vì server từ chối hoặc che giấu banner khi Nmap cố lấy thông tin.                                                          
+Bước 2: Liệt kê ứng dụng bằng Netcat: 
+nc testphp.vulnweb.com 80 
+GET / HTTP/1.1
+Host: testphp.vulnweb.com
+- Kết quả cho thấy 
+HTTP/1.1 200 OK
+Server: nginx/1.19.0
+Date: Mon, 04 Aug 2025 16:36:06 GMT
+Content-Type: text/html; charset=UTF-8
+Transfer-Encoding: chunked
+Connection: keep-alive
+X-Powered-By: PHP/5.6.40-38+ubuntu20.04.1+deb.sury.org+1
+      + Server phản hồi: HTTP/1.1 200 OK → Yêu cầu thành công.
+      + Web server: nginx/1.19.0
+      + Ngôn ngữ lập trình phía sau: PHP/5.6.40 (hiển thị trong tiêu đề X-Powered-By)
+      + Hệ thống chạy trên: Ubuntu 20.04 (gợi ý qua chuỗi gói .deb.sury.org)
+      + Phản hồi dùng: Transfer-Encoding: chunked (gửi theo từng phần)
+      + Dịch vụ hoạt động: Ứng dụng web có nội dung HTML đang chạy bình thường.
+Bước 3: Tra cứu DNS: nslookup testphp.vulnweb.com  
+Server:         192.168.198.2
+Address:        192.168.198.2#53
+Non-authoritative answer:
+Name:   testphp.vulnweb.com
+Address: 44.228.249.3
+- Kết quả thu được:
+      + Tên miền testphp.vulnweb.com trỏ về IP 44.228.249.3.
+      + Truy vấn DNS được xử lý qua DNS server nội bộ (192.168.198.2).
+      + Kết quả nhận được là từ DNS trung gian (không phải máy chủ DNS gốc).
+Bước 4: Tra cứu tên miền ngược: dùng viewdns.info
+ - Kết quả nhận được chỉ có 1 tên miền được lưu trữ trên máy chủ này: vulnweb.com
+Bước 5: Xác định máy chủ định danh:
+host -t ns vulnweb.com 
+- Kết quả nhận được: 
+vulnweb.com name server ns1.eurodns.com.
+vulnweb.com name server ns2.eurodns.com.
+vulnweb.com name server ns3.eurodns.com.
+vulnweb.com name server ns4.eurodns.com.
 
 
