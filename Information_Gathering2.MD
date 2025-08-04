@@ -16,6 +16,26 @@ Trong trường hợp này, ứng dụng hiển thị hai điểm truy cập (th
 2.2.1.1 Mục tiêu kiểm tra: Xác định thông tin thiết kế và cấu hình nhạy cảm nào của ứng dụng, hệ thống hoặc tổ chức được tiết lộ trực tiếp (trên trang web của tổ chức) hoặc gián tiếp (thông qua dịch vụ của bên thứ ba).
 2.2.1.2 Các bước thực hiện:
 Bước 1: Tìm sơ đồ và cấu hình mạng
-- Công cụ thực hiện: Shodan - quét IP/dịch vụ
-
-
+- Công cụ thực hiện: Shodan, Google Dorks, dnsdumpster
+- Gõ các truy vấn như để tìm host liên quan đến Neflix: 
+                        hostname:"netflix.com"
+                        org:"Netflix"
+                        ssl.cert.subject.CN:"*.netflix.com"
+- Kết quả nhận được: 
+      + Hạ tầng phân tán: Các IP xuất hiện ở nhiều khu vực (Mỹ, Tây Ban Nha) cho thấy Netflix dùng CDN và máy chủ toàn cầu.
+      + Không có thông tin nhạy cảm: Máy chủ trả về 404 và chỉ lộ thông tin cơ bản (server, chứng chỉ), không có nội dung hay dịch vụ đặc biệt mở.
+      + Bảo mật tốt: Chứng chỉ SSL hợp lệ, giao thức HTTPS hỗ trợ chuẩn mới (TLS 1.3).
+      + Ý nghĩa: Kết quả chủ yếu để xác định vị trí và trạng thái máy chủ chứ không phải lỗ hổng.
+- Google có thể index nhầm tài liệu nội bộ (pdf, ppt, visio).
+- Một số truy vấn: site:
+                netflix.com "network diagram"
+                site:netflix.com "architecture diagram"
+                site:netflix.com filetype:pdf "network"
+                site:netflix.com filetype:vsd
+                site:netflix.com "internal use only"
+- Kết quả nhận được: 
+      + Netflix không phụ thuộc hoàn toàn vào các CDN bên thứ ba mà chủ yếu dựa trên Open Connect – một hệ thống CDN riêng.
+      + Kiến trúc mạng của họ dựa vào phân tán nội dung đến gần người dùng, sử dụng máy chủ chuyên dụng và cơ chế điều phối thông minh.
+      + Các tài liệu public giúp hiểu cách thức triển khai và vận hành CDN của Netflix, nhưng không tiết lộ thông tin nhạy cảm.
+- Thu thập subdomain → giúp hình dung cấu trúc hệ thống.
+- 
