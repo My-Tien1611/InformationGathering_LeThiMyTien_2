@@ -157,3 +157,16 @@ Bước 1: Dùng Robots.txt: juice-shop.herokuapp.com/robots.txt
 - Là gợi ý tiềm năng cho hacker trong môi trường Juice Shop (mô phỏng lỗ hổng bảo mật).
 - Cần kiểm tra truy cập trực tiếp hoặc quét thư mục để tìm file ẩn.
 - Truy cập trực tiếp: https://juice-shop.herokuapp.com/ftp
+![image alt](https://github.com/My-Tien1611/InformationGathering_LeThiMyTien_2/blob/3ddd45070efcc5d578066607ca075659854f65e3/ftp.jpg)
+- Directory Listing được bật:
+      + Máy chủ liệt kê toàn bộ nội dung thư mục /ftp.
+      + Cho phép kẻ tấn công xem và tải các file tiềm ẩn dữ liệu nhạy cảm.
+- Một số file nhạy cảm đáng chú ý:
+      + incident-support.kdbx: Có thể là file KeePass chứa mật khẩu (dạng mã hóa).
+      + package.json.bak, package-lock.json.bak: File backup có thể tiết lộ thông tin dependency, version, scripts nguy hiểm.
+      + announcement_encrypted.md, encrypt.pyc: Gợi ý có mã hóa hoặc thông báo ẩn.
+      + coupons_2013.md.bak: Có thể chứa mã giảm giá hoặc thông tin nhạy cảm từ quá khứ.
+      + Thư mục quarantine/: Thường dùng chứa file nghi ngờ/phát hiện có vấn đề.
+
+
+
