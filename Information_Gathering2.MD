@@ -232,3 +232,12 @@ vulnweb.com name server ns4.eurodns.com.
 2.2.5.3 Các bước thực hiện: Dùng BurpSuite
 - Trang web công khai username: test và password: test mặc định → rất dễ bị khai thác.
 ![image alt](https://github.com/My-Tien1611/InformationGathering_LeThiMyTien_2/blob/ca53c7ed3b6bc641fd20b4908ec541c052617c85/Thongttindn.jpg)
+- Có đoạn comment này tiết lộ cấu trúc template nội bộ, dễ giúp attacker xây dựng tấn công chính xác hơn.
+![image alt](https://github.com/My-Tien1611/InformationGathering_LeThiMyTien_2/blob/26b8836a962545277d5f1a1a029aba30142e050a/Screenshot%20(1298).png)
+- <form name="loginform" method="post" action="userinfo.php">
+Tệp JavaScript, form POST, endpoint -> Quan trọng để thực hiện tấn công brute-force, SQLi, hoặc credential stuffing.
+2.2.6 Xác định điểm vào ứng dụng
+2.2.6.1 Mục tiêu kiểm tra: Xác định các điểm xâm nhập và điểm tiêm nhiễm có thể xảy ra thông qua phân tích yêu cầu và phản hồi.
+2.2.6.2 Các bước thực hiện
+Bước 1: Xác định phương thức GET và POST khi nào được sử dụng
+
