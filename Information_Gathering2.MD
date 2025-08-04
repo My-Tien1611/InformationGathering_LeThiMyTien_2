@@ -186,7 +186,7 @@ rDNS record for 44.228.249.3: ec2-44-228-249-3.us-west-2.compute.amazonaws.com
 Not shown: 999 filtered tcp ports (no-response)
 PORT   STATE SERVICE    VERSION
 80/tcp open  tcpwrapped
-- Kết quả nhận được: Không hiển thị banner HTTP, vì server từ chối hoặc che giấu banner khi Nmap cố lấy thông tin.                                                          
+- Kết quả nhận được: Không hiển thị banner HTTP, vì server từ chối hoặc che giấu banner khi Nmap cố lấy thông tin.                                                   
 Bước 2: Liệt kê ứng dụng bằng Netcat: 
 nc testphp.vulnweb.com 80 
 GET / HTTP/1.1
@@ -224,5 +224,11 @@ vulnweb.com name server ns1.eurodns.com.
 vulnweb.com name server ns2.eurodns.com.
 vulnweb.com name server ns3.eurodns.com.
 vulnweb.com name server ns4.eurodns.com.
-![image alt](https://github.com/My-Tien1611/InformationGathering_LeThiMyTien_2/blob/f79ed0a1682813323b11f35349cd4cba2e3e12d8/X%C3%A1c%20%C4%91%E1%BB%8Bnh%20m%C3%A1y%20ch%E1%BB%A7%20%C4%91%E1%BB%8Bnh%20danh.jpg)
-
+2.2.5 Kiểm tra nội dung trang web để phát hiện rò rỉ thông tin
+2.2.5.1 Mục tiêu kiểm tra:
+- Xem lại các bình luận và siêu dữ liệu trên trang web để tìm bất kỳ thông tin rò rỉ nào.
+- Thu thập các tệp JavaScript và xem xét mã JS để hiểu rõ hơn về ứng dụng và tìm ra bất kỳ thông tin rò rỉ nào.
+- Xác định xem có tồn tại tệp bản đồ nguồn hoặc tệp gỡ lỗi giao diện khác không.
+2.2.5.3 Các bước thực hiện: Dùng BurpSuite
+Trang web công khai username: test và password: test mặc định → rất dễ bị khai thác.
+![image alt]()
