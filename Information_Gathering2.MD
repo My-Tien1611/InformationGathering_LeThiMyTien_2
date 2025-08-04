@@ -46,3 +46,14 @@ Bước 1: Tìm sơ đồ và cấu hình mạng
       + Bảo mật & Proxy: Dùng HTTPS, reverse proxy (Nginx, Envoy) và các lớp bảo mật nhiều tầng.
       + Cấu trúc domain phản ánh dịch vụ: Các subdomain cho thấy dịch vụ quảng cáo, API nội bộ, cảnh báo, DVD, thử nghiệm,…
 => Kiến trúc này giúp Netflix đạt hiệu suất cao, khả năng mở rộng và an toàn toàn cầu.
+Bước 2: Tìm các bài đăng và email được lưu trữ của quản trị viên hoặc nhân viên chủ chốt khác
+- Công cụ thực hiện : Google Dorking
+- Các truy vấn để tìm thông tin rò rỉ trên web: 
+                  site:juice-shop.herokuapp.com intext:@
+                  site:juice-shop.herokuapp.com admin
+- Kết quả ta thu được được file access.log.2025-08-04 và audit.json:
+
+Bước 3: Tìm quy trình đăng nhập và định dạng tên người dùng:
+Bước 4: Tìm tên người dùng, mật khẩu và khóa riêng tư:
+Bước 5: Tìm tệp cấu hình dịch vụ đám mây hoặc của bên thứ ba
+Bước 6: Tìm tiết lộ nội dung thông báo lỗi và phát triển, thử nghiệm, Kiểm tra chấp nhận của người dùng (UAT) và phiên bản dàn dựng của các trang web.
