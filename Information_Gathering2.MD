@@ -39,3 +39,10 @@ Bước 1: Tìm sơ đồ và cấu hình mạng
       + Các tài liệu public giúp hiểu cách thức triển khai và vận hành CDN của Netflix, nhưng không tiết lộ thông tin nhạy cảm.
 - Thu thập subdomain → giúp hình dung cấu trúc hệ thống.
 ![image alt](https://github.com/My-Tien1611/InformationGathering_LeThiMyTien_2/blob/09718a7a70eaef5bd2084b686b65942c05b6fd69/SubdomainsNetflix.jpg)
+- Kết quả nhận được:
+      + Hạ tầng hybrid: Kết hợp giữa hệ thống riêng của Netflix (ASN 40027) và dịch vụ cloud của AWS (CloudFront, EC2).
+      + CDN phân tán: Sử dụng Open Connect (CDN riêng) để tối ưu truyền tải phim và CloudFront để phân phối các dịch vụ web công khai.
+      + Phân tách rõ môi trường: Có các subdomain riêng cho production, test/dev, B2B và marketing.
+      + Bảo mật & Proxy: Dùng HTTPS, reverse proxy (Nginx, Envoy) và các lớp bảo mật nhiều tầng.
+      + Cấu trúc domain phản ánh dịch vụ: Các subdomain cho thấy dịch vụ quảng cáo, API nội bộ, cảnh báo, DVD, thử nghiệm,…
+=> Kiến trúc này giúp Netflix đạt hiệu suất cao, khả năng mở rộng và an toàn toàn cầu.
