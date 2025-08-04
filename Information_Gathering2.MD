@@ -239,6 +239,13 @@ Tệp JavaScript, form POST, endpoint -> Quan trọng để thực hiện tấn 
 2.2.6 Xác định điểm vào ứng dụng
 2.2.6.1 Mục tiêu kiểm tra: Xác định các điểm xâm nhập và điểm tiêm nhiễm có thể xảy ra thông qua phân tích yêu cầu và phản hồi.
 2.2.6.2 Các bước thực hiện
-Bước 1: Xác định phương thức GET và POST khi nào được sử dụng
+- Xác định phương thức GET và POST khi nào được sử dụng
 ![image alt](https://github.com/My-Tien1611/InformationGathering_LeThiMyTien_2/blob/d84204b6e8d3a136f5f614319c41ecc13af8ebe9/POST.jpg)
-![image alt]()
+![image alt](https://github.com/My-Tien1611/InformationGathering_LeThiMyTien_2/blob/530206f8fdf7aeece16b83d65a8a3e46aea021bd/GET.png)
+- Phương thức POST được sử dụng khi người dùng gửi dữ liệu nhập vào (form) đến server.
+      + Dữ liệu được gửi qua body của request: searchFor=hello&goButton=go
+      + POST thường dùng khi: Gửi form (đăng nhập, tìm kiếm, đăng ký, v.v.), Tránh hiển thị dữ liệu trong URL, Truyền dữ liệu lớn hoặc nhạy cảm
+- Phương thức GET được dùng để yêu cầu dữ liệu từ server (hiển thị trang web).
+      + Không có dữ liệu trong phần body.
+      + Các tham số (nếu có) thường nằm trực tiếp trên URL (ví dụ: /page.php?id=3)
+      + GET thường dùng khi: Truy cập/truy vấn dữ liệu, Duyệt trang, tải thông tin tĩnh, Không làm thay đổi trạng thái hệ thống
