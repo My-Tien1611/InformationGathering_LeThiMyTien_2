@@ -361,3 +361,476 @@ Directory Listing hiển thị các file:
 
 ![Khai thác file nhạy cảm](https://github.com/My-Tien1611/InformationGathering_LeThiMyTien_2/blob/4af444353f4a4c8641b506612edf5551b5cfbf24/Screenshot%20(1311).png)
 
+---
+
+> ## 2.4 🌐 Liệt kê các ứng dụng trên máy chủ web
+
+---
+
+### 📌 2.4.1 Mục tiêu kiểm tra
+
+- Liệt kê các ứng dụng đang tồn tại và hoạt động trên **máy chủ web mục tiêu**.
+
+---
+
+### ⚙️ 2.4.2 Các bước kiểm tra
+
+---
+
+#### 🛰️ **Bước 1: Quét dịch vụ bằng Nmap**
+
+🔧 **Lệnh:**  
+```bash
+nmap testphp.vulnweb.com
+```
+
+🖥️ **Kết quả:**
+```
+PORT   STATE SERVICE
+80/tcp open  http
+```
+
+📌 **Phân tích:**
+
+- Chỉ có cổng **80 (HTTP)** được mở → Hệ thống cố tình **giới hạn bề mặt tấn công**.
+- **Không sử dụng HTTPS** → Có thể bị tấn công **sniffing / MITM** trên môi trường không an toàn.
+
+---
+
+#### 🔎 **Hiển thị banner dịch vụ**
+
+🔧 **Lệnh:**  
+```bash
+nmap -sV testphp.vulnweb.com
+```
+
+🖥️ **Kết quả:**
+```
+80/tcp open  tcpwrapped
+```
+
+📌 **Phân tích:**
+
+- Kết quả là `tcpwrapped` → Máy chủ **từ chối hoặc che giấu banner**, không cho phép Nmap lấy thông tin dịch vụ.
+
+---
+
+#### 📡 **Bước 2: Liệt kê ứng dụng bằng Netcat**
+
+🔧 **Lệnh:**
+```bash
+nc testphp.vulnweb.com 80
+GET / HTTP/1.1
+Host: testphp.vulnweb.com
+```
+
+🖥️ **Kết quả:**
+```
+HTTP/1.1 200 OK
+Server: nginx/1.19.0
+Date: Mon, 04 Aug 2025 16:36:06 GMT
+Content-Type: text/html; charset=UTF-8
+Transfer-Encoding: chunked
+Connection: keep-alive
+X-Powered-By: PHP/5.6.40-38+ubuntu20.04.1+deb.sury.org+1
+```
+
+📌 **Phân tích:**
+
+- ✅ **Phản hồi HTTP 200 OK** → Ứng dụng hoạt động bình thường.
+- 🌐 **Web Server:** `nginx/1.19.0`
+- 💻 **Ngôn ngữ máy chủ:** `PHP/5.6.40`
+- 🐧 **Hệ điều hành:** `Ubuntu 20.04` (suy ra từ chuỗi `.deb.sury.org`)
+- 🔁 **Transfer-Encoding:** `chunked` → Truyền dữ liệu theo từng phần.
+
+---
+
+#### 📬 **Bước 3: Tra cứu DNS**
+
+🔧 **Lệnh:**  
+```bash
+nslookup testphp.vulnweb.com
+```
+
+🖥️ **Kết quả:**
+```
+Name:   testphp.vulnweb.com
+Address: 44.228.249.3
+```
+
+📌 **Phân tích:**
+
+- Tên miền `testphp.vulnweb.com` ánh xạ tới địa chỉ IP `44.228.249.3`.
+- Truy vấn DNS đi qua **DNS nội bộ** (`192.168.198.2`) và là **non-authoritative**.
+
+---
+
+#### 🔁 **Bước 4: Tra cứu tên miền ngược**
+
+🌐 **Dùng công cụ:** `viewdns.info`
+
+📌 **Kết quả:**
+
+- Chỉ duy nhất 1 tên miền được host trên máy chủ này:  
+  → `vulnweb.com`
+
+---
+
+#### 🧭 **Bước 5: Xác định máy chủ định danh (Name Server)**
+
+🔧 **Lệnh:**
+```bash
+host -t ns vulnweb.com
+```
+
+🖥️ **Kết quả:**
+```
+vulnweb.com name server ns1.eurodns.com.
+vulnweb.com name server ns2.eurodns.com.
+vulnweb.com name server ns3.eurodns.com.
+vulnweb.com name server ns4.eurodns.com.
+```
+
+📌 **Phân tích:**
+
+- Hệ thống sử dụng dịch vụ **DNS phân tán** từ **EuroDNS** với 4 máy chủ định danh:
+  - `ns1.eurodns.com`
+  - `ns2.eurodns.com`
+  - `ns3.eurodns.com`
+  - `ns4.eurodns.com`
+
+---
+> ## 2.5 🕵️‍♂️ Kiểm tra nội dung trang web để phát hiện rò rỉ thông tin
+
+---
+
+### 📌 2.5.1 Mục tiêu kiểm tra
+
+- Xem xét **bình luận trong mã nguồn HTML** và **siêu dữ liệu** để tìm các thông tin rò rỉ.
+- Phân tích các **tệp JavaScript** để tìm các thông tin nhạy cảm, chức năng ẩn hoặc endpoint API nội bộ.
+- Kiểm tra sự tồn tại của **tệp bản đồ nguồn** (`.map`) hoặc **tệp gỡ lỗi**, giúp tái cấu trúc mã gốc hoặc hiểu sâu logic ứng dụng.
+
+---
+
+### ⚙️ 2.5.2 Các bước thực hiện: Sử dụng BurpSuite
+
+---
+
+#### 🧪 **Phát hiện tài khoản mặc định**
+
+- Trang web **công khai username và password mặc định**:
+  ```
+  Username: test
+  Password: test
+  ```
+![Tài khoản công khai](https://github.com/My-Tien1611/InformationGathering_LeThiMyTien_2/blob/ca53c7ed3b6bc641fd20b4908ec541c052617c85/Thongttindn.jpg)
+- 📌 **Rủi ro:** Thông tin dễ bị khai thác bởi attacker thông qua brute-force hoặc login tự động.
+---
+
+#### 🧵 **Phân tích comment HTML**
+
+- Mã nguồn HTML có chứa **comment nội bộ tiết lộ cấu trúc template** hoặc tên biến sử dụng bên trong server.
+
+![Comment rò rỉ thông tin](https://github.com/My-Tien1611/InformationGathering_LeThiMyTien_2/blob/26b8836a962545277d5f1a1a029aba30142e050a/Screenshot%20(1298).png)
+
+📌 **Rủi ro:** Những thông tin này giúp attacker hiểu rõ cấu trúc nội bộ → dễ khai thác tấn công chính xác (targeted injection, template injection, SSRF, etc.).
+
+---
+
+#### 📮 **Phân tích Form và Endpoint**
+
+- Mã HTML chứa form đăng nhập như sau:
+  ```html
+  <form name="loginform" method="post" action="userinfo.php">
+  ```
+
+📌 **Phân tích:**
+
+- 🛠️ **Endpoint:** `userinfo.php` là đích đến của dữ liệu đăng nhập → cần kiểm tra kỹ cho các lỗ hổng như:
+  - **Brute-force login**
+  - **SQL injection (SQLi)**
+  - **Credential Stuffing**
+- 🧩 **Biến thể POST + JS:** Khi kết hợp với các tệp JavaScript được tải, attacker có thể tái cấu trúc logic xác thực và viết tool tự động đăng nhập/thử tài khoản.
+
+---
+
+> ## 2.6 🎯 Xác định điểm vào ứng dụng
+
+---
+
+### 📌 2.6.1 Mục tiêu kiểm tra
+
+- Xác định các điểm xâm nhập và điểm tiêm nhiễm có thể xảy ra thông qua phân tích yêu cầu và phản hồi.
+
+---
+
+### 🧪 2.6.2 Các bước thực hiện
+
+---
+
+#### 🛠️ **Xác định các phương thức HTTP**
+
+1. **Phương thức POST** – khi người dùng **gửi dữ liệu** đến máy chủ:
+   - Dữ liệu nằm trong **body** của request:
+     ```
+     searchFor=hello&goButton=go
+     ```
+   - 🔐 POST thường được dùng khi:
+     - Gửi form (đăng nhập, tìm kiếm, đăng ký, phản hồi, v.v.)
+     - Tránh hiển thị dữ liệu nhạy cảm trên URL
+     - Truyền dữ liệu lớn hoặc chứa thông tin riêng tư
+
+   ![Phương thức POST](https://github.com/My-Tien1611/InformationGathering_LeThiMyTien_2/blob/d84204b6e8d3a136f5f614319c41ecc13af8ebe9/POST.jpg)
+
+---
+
+2. **Phương thức GET** – khi người dùng **yêu cầu dữ liệu** từ server (thường là xem nội dung trang web):
+   - Không có dữ liệu trong body.
+   - Dữ liệu (nếu có) được truyền thông qua **URL query string**:
+     ```
+     /page.php?id=3
+     ```
+   - 🔎 GET thường được dùng khi:
+     - Truy cập dữ liệu hoặc tải nội dung tĩnh
+     - Duyệt trang, theo liên kết
+     - Không thay đổi trạng thái hệ thống
+
+   ![Phương thức GET](https://github.com/My-Tien1611/InformationGathering_LeThiMyTien_2/blob/530206f8fdf7aeece16b83d65a8a3e46aea021bd/GET.png)
+
+---
+
+### ✅ Tổng kết
+
+> Việc xác định điểm vào của ứng dụng (entry points) là bước **cốt lõi trong quá trình đánh giá bảo mật web**. Các điểm sử dụng phương thức GET và POST thường là **nơi có thể thử các payload khai thác**, như:
+>
+> - **XSS (Cross-Site Scripting)**
+> - **SQLi (SQL Injection)**
+> - **Command Injection**
+> - **LFI/RFI (File Inclusion)**
+> - **Privilege Escalation**
+
+Việc sử dụng **BurpSuite, proxy hoặc công cụ phân tích HTTP** giúp kiểm tra rõ ràng và ghi nhận chính xác các endpoint có thể bị khai thác.
+
+---
+## 2.7 🗺️ Thực thi đường dẫn thông qua ứng dụng
+
+---
+
+### 🎯 2.7.1 Mục tiêu kiểm tra
+
+- Lập bản đồ (mapping) toàn bộ ứng dụng web mục tiêu.
+- Hiểu các **luồng xử lý chính** (workflow) và **điểm điều hướng quan trọng** trong hệ thống.
+
+---
+
+### 🧪 2.7.2 Các bước thực hiện
+
+---
+
+#### 🔍 Bước 1: Thêm vào Scope và khởi động Spider
+
+- Vào **tab Target → Site Map → URL view** của BurpSuite.
+- Chọn host `testphp.vulnweb.com` để xem chi tiết cấu trúc và phản hồi từng endpoint.
+
+![Spider Scope](https://github.com/My-Tien1611/InformationGathering_LeThiMyTien_2/blob/115c21743e2d383c4f23d0ade2f3ac7c42e44fad/Screenshot%20(1312).png)
+
+**Thông tin quan sát:**
+- **Contents:** Liệt kê các URL, phương thức (GET/POST), tham số, status code, MIME type, tiêu đề,...
+- **Request / Response:** Hiển thị toàn bộ nội dung HTTP của yêu cầu và phản hồi.
+
+---
+
+#### 🌲 Bước 2: Xem cấu trúc cây đường dẫn (Site Map)
+
+- Sau khi thu thập URL bằng Spider hoặc duyệt tay (manual browsing), chuyển sang **Crawl paths view**.
+- Click vào từng node để xem chi tiết các request, issue, và outlink tương ứng.
+
+![Site Map Tree](https://github.com/My-Tien1611/InformationGathering_LeThiMyTien_2/blob/115c21743e2d383c4f23d0ade2f3ac7c42e44fad/Screenshot%20(1313).png)
+
+**Nhận xét:**
+- Burp đã mapping được **toàn bộ cấu trúc ứng dụng**.
+- Có các đường dẫn dạng: `/login`, `/signup`, `/profile`, `/category?id=...`
+- Từ đây, có thể xác định các điểm chức năng quan trọng để phục vụ khai thác như:
+  - Đăng nhập
+  - Tìm kiếm sản phẩm
+  - Quản lý hồ sơ
+  - Lọc danh mục, v.v.
+- Quá trình này **rất hữu ích** cho việc xác định điểm tiêm nhiễm sau này (trong giai đoạn kiểm thử).
+
+---
+
+## 2.8 🧬 Khung ứng dụng web – Dấu vân tay
+
+---
+
+### 🎯 2.8.1 Mục tiêu kiểm tra
+
+- Xác định **ngôn ngữ lập trình**, **hệ điều hành**, **framework**, **công nghệ frontend/backend** mà ứng dụng đang sử dụng.
+- Dựa vào các thông tin này để suy đoán **lỗ hổng tiềm ẩn**.
+
+---
+
+### 🧪 2.8.2 Các bước thực hiện
+
+---
+
+#### 🔎 Bước 1: Fingerprint Web Application Framework
+
+![Framework Info](https://github.com/My-Tien1611/InformationGathering_LeThiMyTien_2/blob/6a8305baca1438013e24cf531fb67c5c008e37ad/Screenshot%20(1314).png)
+
+**Kết quả thu được:**
+- **Ngôn ngữ phía server:** PHP
+- **Phiên bản PHP:** 5.6.40
+- **Hệ điều hành:** Ubuntu 20.04
+- **Nguồn build:** từ kho deb.sury.org
+
+🔴 **Cảnh báo:** Phiên bản PHP 5.6 đã **ngừng hỗ trợ từ lâu**, rất nhiều lỗ hổng nghiêm trọng có thể tồn tại.
+
+---
+
+#### 📂 Bước 2: Fingerprint Web Application
+
+![App Info](https://github.com/My-Tien1611/InformationGathering_LeThiMyTien_2/blob/6a8305baca1438013e24cf531fb67c5c008e37ad/Screenshot%20(1315).png)
+
+**Quan sát:**
+- Giao diện lỗi thời, sử dụng HTML 4.01, Flash, JS cổ điển.
+- Phát triển bằng phần mềm Adobe Dreamweaver.
+- Đây là một **ứng dụng mô phỏng để thực hành pentest**, chứa các lỗi bảo mật phổ biến như:
+  - SQLi
+  - XSS
+  - LFI
+  - CSRF
+  - Cookie hijacking...
+
+---
+
+#### 🔧 Bước 3: Sử dụng công cụ Wappalyzer
+
+- Sử dụng extension Wappalyzer trên trình duyệt để phân tích công nghệ web đang sử dụng.
+
+![Wappalyzer](https://github.com/My-Tien1611/InformationGathering_LeThiMyTien_2/blob/cd11cd95739ed8f701b1425df88fc1330033aae2/Screenshot%20(1317).png)
+
+**Kết quả:**
+- **Web server:** Nginx
+- **Ngôn ngữ backend:** PHP
+- **Client-side:** JavaScript cũ
+- **Hệ thống quản lý:** Không có CMS (Content Management System)
+- Có nhiều điểm dễ khai thác do công nghệ lỗi thời và thông tin rò rỉ rõ ràng.
+
+---
+## 2.9 🗺️ Kiến trúc Ứng dụng – Bản đồ
+
+---
+
+### 🎯 2.9.1 Mục tiêu kiểm tra
+
+- Tạo bản đồ kiến trúc của ứng dụng web mục tiêu.
+- Dựa trên thông tin thu thập từ header, HTTP methods, phản hồi lỗi và các quan sát hệ thống để xác định thành phần hệ thống.
+
+---
+
+### 🧪 2.9.2 Các bước thực hiện
+
+---
+
+#### 📥 Bước 1: Phân tích tiêu đề HTTP
+
+```bash
+curl -I https://juice-shop.herokuapp.com/
+```
+
+**Kết quả:**
+
+```http
+HTTP/1.1 200 OK
+Accept-Ranges: bytes
+Access-Control-Allow-Origin: *
+Cache-Control: public, max-age=0
+Content-Length: 80117
+Content-Type: text/html; charset=UTF-8
+Date: Tue, 05 Aug 2025 04:20:22 GMT
+Etag: W/"138f5-19878707b21"
+Feature-Policy: payment 'self'
+Last-Modified: Tue, 05 Aug 2025 04:14:54 GMT
+Nel: {...}
+Server: Heroku
+Via: 1.1 heroku-router
+X-Content-Type-Options: nosniff
+X-Frame-Options: SAMEORIGIN
+```
+
+✅ **Phân tích:**
+- Ứng dụng đang được triển khai trên nền tảng **Heroku (PaaS)**.
+- Header `Via: heroku-router` cho thấy có sử dụng **reverse proxy** (mặc định của Heroku).
+- Cho phép truy cập từ mọi domain (`Access-Control-Allow-Origin: *`).
+- Header `X-Content-Type-Options`, `X-Frame-Options` thể hiện một số cấu hình bảo mật cơ bản.
+- Không có dấu hiệu rõ ràng về **WAF** (Web Application Firewall).
+
+---
+
+#### 🔧 Bước 2: Kiểm tra phương thức HTTP được hỗ trợ
+
+```bash
+curl -X OPTIONS https://juice-shop.herokuapp.com/ -i
+```
+
+**Kết quả:**
+
+```http
+HTTP/1.1 204 No Content
+Access-Control-Allow-Methods: GET,HEAD,PUT,PATCH,POST,DELETE
+Access-Control-Allow-Origin: *
+Server: Heroku
+Via: 1.1 heroku-router
+```
+
+✅ **Phân tích:**
+- Ứng dụng hỗ trợ đầy đủ các phương thức HTTP chuẩn REST: `GET`, `POST`, `PUT`, `PATCH`, `DELETE`.
+- Hỗ trợ **CORS toàn cục** (Access-Control-Allow-Origin: *) → có thể gọi API từ bất kỳ domain nào.
+- Cho thấy ứng dụng có khả năng là **RESTful API backend**.
+
+---
+
+#### 🛡️ Bước 3: Kiểm tra Reverse Proxy hoặc WAF
+
+```bash
+curl "https://juice-shop.herokuapp.com/' OR '1'='1"
+```
+
+**Kết quả:**
+```
+curl: (3) URL rejected: Malformed input to a URL function
+```
+
+✅ **Phân tích:**
+- Không thấy thông báo lỗi chi tiết từ phía server.
+- Không có bằng chứng rõ ràng rằng có sử dụng **WAF** để chặn payload SQLi.
+- Heroku có thể đang xử lý một số lỗi đầu vào thông qua reverse proxy.
+- Khả năng cao là payload bị lỗi ở client (curl) do URL malformed, chưa đến được app.
+
+---
+
+### 🧱 Tổng kết kiến trúc ứng dụng
+
+| Thành phần          | Chi tiết                                                                           |
+|---------------------|------------------------------------------------------------------------------------|
+| **Nền tảng triển khai** | Heroku (PaaS)                                                                    |
+| **Reverse Proxy**      | Có – `Via: heroku-router`                                                        |
+| **WAF**                | Không rõ ràng – Không thấy dấu hiệu chặn payload rõ                               |
+| **Giao diện (Frontend)** | Angular Framework                                                              |
+| **Backend**            | Node.js + Express (theo tài liệu OWASP Juice Shop)                               |
+| **API hỗ trợ**         | RESTful – GET, POST, PUT, PATCH, DELETE                                          |
+| **Database**           | Có – Ứng dụng kết nối CSDL phục vụ cho các chức năng CRUD sản phẩm, đánh giá... |
+| **CORS**               | Cho phép toàn bộ origin (`*`)                                                    |
+
+---
+
+🔍 **Kết luận:**  
+Ứng dụng OWASP Juice Shop có kiến trúc hiện đại với REST API và phân tách rõ frontend/backend. Tuy nhiên:
+- Cho phép mọi origin có thể là lỗ hổng CORS.
+- Không có biện pháp chặn payload rõ ràng có thể dẫn đến nguy cơ **SQL Injection** nếu không xử lý input đúng cách.
+- Là ứng dụng mô phỏng nên có chủ ý chứa nhiều lỗi bảo mật để phục vụ kiểm thử.
+
+---
+
+
