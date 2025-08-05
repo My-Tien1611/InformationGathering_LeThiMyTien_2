@@ -259,3 +259,7 @@ Tệp JavaScript, form POST, endpoint -> Quan trọng để thực hiện tấn 
       + Không có dữ liệu trong phần body.
       + Các tham số (nếu có) thường nằm trực tiếp trên URL (ví dụ: /page.php?id=3)
       + GET thường dùng khi: Truy cập/truy vấn dữ liệu, Duyệt trang, tải thông tin tĩnh, Không làm thay đổi trạng thái hệ thống
+2.2.7 Thực thi đường dẫn thông qua ứng dụng
+2.2.7.1 Mục tiêu kiểm tra: Lập bản đồ ứng dụng mục tiêu và hiểu các quy trình công việc chính.
+2.2.7.2 Các bước thực hiện
+Bước 1 Thêm vào Scope và khởi đ
