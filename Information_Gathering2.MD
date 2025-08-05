@@ -346,7 +346,7 @@ Directory Listing hiển thị các file:
 🛑 → Đây là một lỗ hổng bảo mật dạng **Directory Browsing / Insecure Direct Object Reference (IDOR)**  
 → Attacker có thể thấy **toàn bộ file** mà **không cần xác thực**.
 
-🖼️ ![Directory Listing trong Burp](https://github.com/My-Tien1611/InformationGathering_LeThiMyTien_2/blob/3eb1fa42df50ef264326e5abcb48e2054636ffbc/Screenshot%20(1310).png)
+![Directory Listing trong Burp](https://github.com/My-Tien1611/InformationGathering_LeThiMyTien_2/blob/3eb1fa42df50ef264326e5abcb48e2054636ffbc/Screenshot%20(1310).png)
 
 ---
 
@@ -359,5 +359,5 @@ Directory Listing hiển thị các file:
 
 ✅ Đã truy xuất thành công **tài liệu mật** nhờ vào lỗ hổng Directory Listing.
 
-🖼️ ![Khai thác file nhạy cảm](https://github.com/My-Tien1611/InformationGathering_LeThiMyTien_2/blob/4af444353f4a4c8641b506612edf5551b5cfbf24/Screenshot%20(1311).png)
+![Khai thác file nhạy cảm](https://github.com/My-Tien1611/InformationGathering_LeThiMyTien_2/blob/4af444353f4a4c8641b506612edf5551b5cfbf24/Screenshot%20(1311).png)
 
