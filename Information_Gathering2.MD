@@ -172,7 +172,7 @@ Response trả về một directory listing (liệt kê thư mục), chứa các
 ![image alt](https://github.com/My-Tien1611/InformationGathering_LeThiMyTien_2/blob/3eb1fa42df50ef264326e5abcb48e2054636ffbc/Screenshot%20(1310).png)
 Gửi request GET /ftp/acquisitions.md. ** This document is confidential! Do not distribute! ** 
 -> Đã khai thác Directory Listing để tìm và đọc được file confidential.
-![image alt](https://github.com/My-Tien1611/InformationGathering_LeThiMyTien_2/blob/c6e39f53d053deeafeb9042377ca67a9acb029df/Screenshot%20(1311).png)
+![image alt](https://github.com/My-Tien1611/InformationGathering_LeThiMyTien_2/blob/4af444353f4a4c8641b506612edf5551b5cfbf24/Screenshot%20(1311).png)
 2.2.4 Liệt kê các ứng dụng trên máy chủ web
 2.2.4.1 Mục tiêu kiểm tra: Liệt kê các ứng dụng trong phạm vi tồn tại trên máy chủ web.
 2.2.4.2 Các bước kiểm tra
