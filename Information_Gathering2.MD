@@ -1,7 +1,7 @@
 Tìm hiểu Information Gathering trong Web Application Security Testing với trang 
 - Tên tài liệu: Information Gathering
 - Thực hiện: Lê Thị Mỹ Tiên
-- Cập nhật: 1/8/2025
+- Cập nhật: 5/8/2025
 1. Mục lục
 2. Nội dung
 2.1 Mục tiêu Thu thập thông tin trong kiểm tra bảo mật ứng dụng web:
