@@ -276,8 +276,18 @@ Sau khi thu thập URL bằng Spider hoặc manual browsing.Chuyển sang Crawl 
       + Một số đường dẫn là danh mục sản phẩm (categories), một số là chức năng (login, signup, your profile).
       + Mỗi node có thể mở ra để xem request/response chi tiết.
       + Đây là kết quả của quá trình mapping (lập bản đồ) ứng dụng web.
-2.2.8 Khung ứng dụng web vân tay
+2.2.8 Khung ứng dụng web vân tay 
 2.2.8.1 Mục tiêu kiểm tra: Lấy dấu vân tay các thành phần được ứng dụng web sử dụng.
 2.2.8.2 Các bước thực hiện
 Bước 1: Fingerprint Web Application Framework
-![
+![image alt](https://github.com/My-Tien1611/InformationGathering_LeThiMyTien_2/blob/6a8305baca1438013e24cf531fb67c5c008e37ad/Screenshot%20(1314).png)
+Kết quả nhận được: Ngôn ngữ: PHP, Phiên bản PHP: 5.6.40, Hệ điều hành: Ubuntu 20.04,Nguồn build: kho deb.sury.org
+-> Website chạy PHP, Bản PHP rất cũ (5.6, đã hết hỗ trợ), tiềm ẩn nhiều lỗ hổng bảo mật.
+Bước 2: Fingerprint Web Application
+![image alt](https://github.com/My-Tien1611/InformationGathering_LeThiMyTien_2/blob/6a8305baca1438013e24cf531fb67c5c008e37ad/Screenshot%20(1315).png)
+- Ứng dụng được phát triển bằng PHP.
+- Giao diện và mã lệnh lỗi thời, dựa trên công nghệ cũ như HTML 4.01, Flash, JavaScript cổ.
+- Thiết kế bởi Adobe Dreamweaver – công cụ thiết kế web WYSIWYG.
+- Đây là ứng dụng mô phỏng, chứa lỗ hổng bảo mật có chủ đích để người dùng thực hành pentest.
+- Có nhiều chức năng dễ khai thác, phù hợp cho kiểm thử bảo mật như SQLi, XSS, CSRF, LFI,...
+Bước 3: Dùng tool
