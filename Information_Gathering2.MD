@@ -38,7 +38,7 @@ Các tham số sau đây đại diện cho hai điểm truy cập vào ứng d�
 
 ---
 
-### 2.1 Thực hiện trinh sát phát hiện rò rỉ thông tin bằng công cụ tìm kiếm:
+## 2.1 Thực hiện trinh sát phát hiện rò rỉ thông tin bằng công cụ tìm kiếm:
 
 #### 🎯 Mục tiêu
 Xác định thông tin thiết kế và cấu hình nhạy cảm nào của ứng dụng, hệ thống hoặc tổ chức được tiết lộ trực tiếp (trên trang web của tổ chức) hoặc gián tiếp (thông qua dịch vụ của bên thứ ba).
@@ -308,9 +308,6 @@ Disallow: /ftp
 ➡️ **Tiến hành kiểm tra trực tiếp:**  
 🔗 [`https://juice-shop.herokuapp.com/ftp`](https://juice-shop.herokuapp.com/ftp)  
 ![image alt](https://github.com/My-Tien1611/InformationGathering_LeThiMyTien_2/blob/3ddd45070efcc5d578066607ca075659854f65e3/ftp.jpg)
-🖼️ ![Directory Listing Bật](https://github.com/My-Tien1611/InformationGathering_LeThiMyTien_2/blob/3ddd45070efcc5d578066607ca075659854f65e3/ftp.jpg)
-
----
 
 📂 **Kết quả: Directory Listing đang bật**
 
@@ -331,9 +328,11 @@ Disallow: /ftp
 📌 **Phát hiện endpoint tiềm năng:** `/ftp/legal.md`  
 → Có thể thấy khi duyệt web hoặc thông qua Burp Suite (HTTP history).
 
-🖼️ ![Burp Request](https://github.com/My-Tien1611/InformationGathering_LeThiMyTien_2/blob/c6e39f53d053deeafeb9042377ca67a9acb029df/Screenshot%20(1305).png)
+![image alt](https://github.com/My-Tien1611/InformationGathering_LeThiMyTien_2/blob/c6e39f53d053deeafeb9042377ca67a9acb029df/Screenshot%20(1305).png)
 
-🖼️ ![Burp Repeater](https://github.com/My-Tien1611/InformationGathering_LeThiMyTien_2/blob/d88811f7310e36694ba372eaa0530389870f8b4a/Screenshot%20(1308).png)
+- Nhấn forward. Tất cả các tiến trình yêu cầu từ trình duyệt máy khách đến máy chủ sẽ được ghi lại trên HTTP history. Tìm địa chỉ trong cột URL và chọn Send to Repeater
+
+![image alt](https://github.com/My-Tien1611/InformationGathering_LeThiMyTien_2/blob/d88811f7310e36694ba372eaa0530389870f8b4a/Screenshot%20(1308).png)
 
 📎 **Kết quả:**  
 Directory Listing hiển thị các file:
