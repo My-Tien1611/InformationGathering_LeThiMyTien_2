@@ -292,3 +292,48 @@ Bước 2: Fingerprint Web Application
 - Có nhiều chức năng dễ khai thác, phù hợp cho kiểm thử bảo mật như SQLi, XSS, CSRF, LFI,...
 Bước 3: Dùng tool:wappalyzer
 ![image alt](https://github.com/My-Tien1611/InformationGathering_LeThiMyTien_2/blob/cd11cd95739ed8f701b1425df88fc1330033aae2/Screenshot%20(1317).png)
+2.2.9 Kiến trúc ứng dụng bản đồ
+2.2.9.1 Mục tiêu kiểm tra: Tạo bản đồ ứng dụng hiện tại dựa trên nghiên cứu đã tiến hành.
+2.2.9.2 Các bước thực hiện
+Bước 1: Phân tích tiêu đề HTTP: curl -I https://juice-shop.herokuapp.com/
+                    HTTP/1.1 200 OK
+                    Accept-Ranges: bytes
+                    Access-Control-Allow-Origin: *
+                    Cache-Control: public, max-age=0
+                    Content-Length: 80117
+                    Content-Type: text/html; charset=UTF-8
+                    Date: Tue, 05 Aug 2025 04:20:22 GMT
+                    Etag: W/"138f5-19878707b21"
+                    Feature-Policy: payment 'self'
+                    Last-Modified: Tue, 05 Aug 2025 04:14:54 GMT
+                    Nel: {"report_to":"heroku-nel","response_headers":["Via"],"max_age":3600,"success_fraction":0.01,"failure_fraction":0.1}
+                    Report-To: {"group":"heroku-nel","endpoints":[{"url":"https://nel.heroku.com/reports?s=4SVqm5acgeqm%2BdCg1SSYEHfMVqyJ0%2BcwyyOP2qjnMgk%3D\u0026sid=812dcc77-0bd0-43b1-a5f1-b25750382959\u0026ts=1754367622"}],"max_age":3600}
+                    Reporting-Endpoints: heroku-nel="https://nel.heroku.com/reports?s=4SVqm5acgeqm%2BdCg1SSYEHfMVqyJ0%2BcwyyOP2qjnMgk%3D&sid=812dcc77-0bd0-43b1-a5f1-b25750382959&ts=1754367622"
+                    Server: Heroku
+                    Vary: Accept-Encoding
+                    Via: 1.1 heroku-router
+                    X-Content-Type-Options: nosniff
+                    X-Frame-Options: SAMEORIGIN
+                    X-Recruiting: /#/jobs
+Bước 2: Kiểm tra phương thức HTTP được hỗ trợ: curl -X OPTIONS https://juice-shop.herokuapp.com/ -i
+                    HTTP/1.1 204 No Content
+                    Access-Control-Allow-Methods: GET,HEAD,PUT,PATCH,POST,DELETE
+                    Access-Control-Allow-Origin: *
+                    Date: Tue, 05 Aug 2025 04:20:45 GMT
+                    Nel: {"report_to":"heroku-nel","response_headers":["Via"],"max_age":3600,"success_fraction":0.01,"failure_fraction":0.1}
+                    Report-To: {"group":"heroku-nel","endpoints":[{"url":"https://nel.heroku.com/reports?s=FGpAhyGyejyMUvb%2FlGRw6xtTG8xlxUNK%2FecPnly%2FGR4%3D\u0026sid=812dcc77-0bd0-43b1-a5f1-b25750382959\u0026ts=1754367645"}],"max_age":3600}
+                    Reporting-Endpoints: heroku-nel="https://nel.heroku.com/reports?s=FGpAhyGyejyMUvb%2FlGRw6xtTG8xlxUNK%2FecPnly%2FGR4%3D&sid=812dcc77-0bd0-43b1-a5f1-b25750382959&ts=1754367645"
+                    Server: Heroku
+                    Vary: Access-Control-Request-Headers
+                    Via: 1.1 heroku-router
+Bước 3: Kiểm tra reverse proxy hoặc WAF:curl "https://juice-shop.herokuapp.com/' OR '1'='1"
+curl: (3) URL rejected: Malformed input to a URL function
+Kết quả nhận được: 
+- Ứng dụng triển khai trên Heroku (PaaS).
+- Sử dụng Reverse Proxy (thể hiện qua header Via: heroku-router).
+- Có khả năng dùng Load Balancer (đặc điểm mặc định của Heroku).
+- Không thấy WAF rõ ràng, không có dấu hiệu chặn payload.
+- Ứng dụng có kết nối với Cơ sở dữ liệu back-end (sản phẩm, review, CRUD).
+- Giao diện viết bằng Angular (Front-end framework).
+- Back-end dùng Node.js + Express (theo tài liệu OWASP Juice Shop).
+- Hỗ trợ đầy đủ các phương thức REST API (GET, POST, PUT, PATCH, DELETE).
