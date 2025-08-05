@@ -290,4 +290,5 @@ Bước 2: Fingerprint Web Application
 - Thiết kế bởi Adobe Dreamweaver – công cụ thiết kế web WYSIWYG.
 - Đây là ứng dụng mô phỏng, chứa lỗ hổng bảo mật có chủ đích để người dùng thực hành pentest.
 - Có nhiều chức năng dễ khai thác, phù hợp cho kiểm thử bảo mật như SQLi, XSS, CSRF, LFI,...
-Bước 3: Dùng tool
+Bước 3: Dùng tool:wappalyzer
+![image alt](https://github.com/My-Tien1611/InformationGathering_LeThiMyTien_2/blob/cd11cd95739ed8f701b1425df88fc1330033aae2/Screenshot%20(1317).png)
