@@ -832,5 +832,12 @@ curl: (3) URL rejected: Malformed input to a URL function
 - Là ứng dụng mô phỏng nên có chủ ý chứa nhiều lỗi bảo mật để phục vụ kiểm thử.
 
 ---
+## 🎯 Tổng kết của quá trình thu thập thông tin
+
+- Là **bước đầu tiên và quan trọng nhất** trong quá trình kiểm thử bảo mật ứng dụng web.
+- Giúp **hiểu rõ mục tiêu**, xác định các **bề mặt tấn công tiềm năng** trước khi tiến hành khai thác.
+- Cung cấp **cơ sở dữ liệu đầu vào** cho các giai đoạn tiếp theo:
+  - 🛠️ Đánh giá lỗ hổng (Vulnerability Assessment)
+  - 🎯 Khai thác (Exploitation)
 
 
