@@ -1,339 +1,49 @@
-Tìm hiểu Information Gathering trong Web Application Security Testing với trang 
-- Tên tài liệu: Information Gathering
-- Thực hiện: Lê Thị Mỹ Tiên
-- Cập nhật: 5/8/2025
-1. Mục lục
-2. Nội dung
-2.1 Mục tiêu Thu thập thông tin trong kiểm tra bảo mật ứng dụng web:
-- Kiểm tra bảo mật là phương pháp đánh giá tính bảo mật của hệ thống máy tính hoặc mạng bằng cách xác thực và kiểm chứng một cách có hệ thống tính hiệu quả của các biện pháp kiểm soát bảo mật ứng dụng. Kiểm tra bảo mật ứng dụng web chỉ tập trung vào việc đánh giá tính bảo mật của ứng dụng web. Quy trình này bao gồm việc chủ động phân tích ứng dụng để tìm ra bất kỳ điểm yếu, lỗi kỹ thuật hoặc lỗ hổng bảo mật nào. Bất kỳ vấn đề bảo mật nào được tìm thấy sẽ được trình bày cho chủ sở hữu hệ thống, cùng với đánh giá tác động, đề xuất biện pháp khắc phục hoặc giải pháp kỹ thuật
-- Trong quá trình kiểm thử thụ động, người kiểm thử cố gắng hiểu logic của ứng dụng và khám phá ứng dụng với tư cách người dùng. Các công cụ có thể được sử dụng để thu thập thông tin. Ví dụ: proxy HTTP có thể được sử dụng để quan sát tất cả các yêu cầu và phản hồi HTTP. Cuối giai đoạn này, người kiểm thử thường sẽ hiểu rõ tất cả các điểm truy cập và chức năng của hệ thống (ví dụ: tiêu đề HTTP, tham số, cookie, API, cách sử dụng/mô hình công nghệ, v.v.). Phần Thu thập Thông tin giải thích cách thực hiện kiểm thử thụ động.
-Ví dụ, người kiểm tra có thể tìm thấy một trang tại URL sau:https://www.example.com/login/auth_form
+# 📚 Tìm hiểu Information Gathering trong Web Application Security Testing
+
+- **Tên tài liệu:** Information Gathering  
+- **Thực hiện:** Lê Thị Mỹ Tiên  
+- **Cập nhật:** 05/08/2025
+
+---
+
+## 📑 Mục lục
+
+1. [Mục tiêu thu thập thông tin](#1-mục-tiêu-thu-thập-thông-tin)
+2. [Cách thực hiện kiểm thử thủ công](#2-cách-thực-hiện-kiểm-thử-thủ-công)
+    - [2.1 Trinh sát với công cụ tìm kiếm](#21-trinh-sát-với-công-cụ-tìm-kiếm)
+    - [2.2 Web server fingerprinting](#22-web-server-fingerprinting)
+    - [2.3 Phân tích tệp metadata](#23-phân-tích-tệp-metadata)
+    - [2.4 Liệt kê ứng dụng trên máy chủ web](#24-liệt-kê-ứng-dụng-trên-máy-chủ-web)
+    - [2.5 Kiểm tra nội dung website](#25-kiểm-tra-nội-dung-website)
+    - [2.6 Xác định điểm vào ứng dụng](#26-xác-định-điểm-vào-ứng-dụng)
+    - [2.7 Thực thi đường dẫn ứng dụng](#27-thực-thi-đường-dẫn-ứng-dụng)
+    - [2.8 Web Application Framework Fingerprinting](#28-web-application-framework-fingerprinting)
+    - [2.9 Lập bản đồ kiến trúc ứng dụng](#29-lập-bản-đồ-kiến-trúc-ứng-dụng)
+
+---
+
+## 1. 🎯 Mục tiêu Thu thập thông tin
+
+- **Định nghĩa:** Kiểm tra bảo mật là phương pháp đánh giá tính bảo mật của hệ thống máy tính hoặc mạng bằng cách xác thực và kiểm chứng một cách có hệ thống tính hiệu quả của các biện pháp kiểm soát bảo mật ứng dụng. Kiểm tra bảo mật ứng dụng web chỉ tập trung vào việc đánh giá tính bảo mật của ứng dụng web. Quy trình này bao gồm việc chủ động phân tích ứng dụng để tìm ra bất kỳ điểm yếu, lỗi kỹ thuật hoặc lỗ hổng bảo mật nào. Bất kỳ vấn đề bảo mật nào được tìm thấy sẽ được trình bày cho chủ sở hữu hệ thống, cùng với đánh giá tác động, đề xuất biện pháp khắc phục hoặc giải pháp kỹ thuật
+- **Kiểm tra bảo mật là phương pháp đánh giá tính bảo mật của hệ thống máy tính hoặc mạng bằng cách xác thực và kiểm chứng một cách có hệ thống tính hiệu quả của các biện pháp kiểm soát bảo mật ứng dụng. Kiểm tra bảo mật ứng dụng web chỉ tập trung vào việc đánh giá tính bảo mật của ứng dụng web. Quy trình này bao gồm việc chủ động phân tích ứng dụng để tìm ra bất kỳ điểm yếu, lỗi kỹ thuật hoặc lỗ hổng bảo mật nào. Bất kỳ vấn đề bảo mật nào được tìm thấy sẽ được trình bày cho chủ sở hữu hệ thống, cùng với đánh giá tác động, đề xuất biện pháp khắc phục hoặc giải pháp kỹ thuật**
+- **Ví dụ, người kiểm tra có thể tìm thấy một trang tại URL sau:https://www.example.com/login/auth_form
 Điều này có thể chỉ ra biểu mẫu xác thực trong đó ứng dụng yêu cầu tên người dùng và mật khẩu.
-Các tham số sau đây đại diện cho hai điểm truy cập vào ứng dụng:https://www.example.com/appx?a=1&b=1
-Trong trường hợp này, ứng dụng hiển thị hai điểm truy cập (tham số avà b). Tất cả các điểm đầu vào được tìm thấy trong giai đoạn này đều đại diện cho một mục tiêu thử nghiệm. Việc theo dõi thư mục hoặc cây lệnh gọi của ứng dụng và tất cả các điểm truy cập có thể hữu ích trong quá trình thử nghiệm đang diễn ra.
-2.2 Cách thực hiện kiểm thử thủ động
-2.2.1 Thực hiện trinh sát phát hiện rò rỉ thông tin bằng công cụ tìm kiếm:
-2.2.1.1 Mục tiêu kiểm tra: Xác định thông tin thiết kế và cấu hình nhạy cảm nào của ứng dụng, hệ thống hoặc tổ chức được tiết lộ trực tiếp (trên trang web của tổ chức) hoặc gián tiếp (thông qua dịch vụ của bên thứ ba).
-2.2.1.2 Các bước thực hiện:
-- Công cụ thực hiện: Shodan, Google Dorks, dnsdumpster
-- Gõ các truy vấn như để tìm host liên quan đến Neflix: 
-                        hostname:"netflix.com"
-                        org:"Netflix"
-                        ssl.cert.subject.CN:"*.netflix.com"
-- Kết quả nhận được: 
-      + Hạ tầng phân tán: Các IP xuất hiện ở nhiều khu vực (Mỹ, Tây Ban Nha) cho thấy Netflix dùng CDN và máy chủ toàn cầu.
-      + Không có thông tin nhạy cảm: Máy chủ trả về 404 và chỉ lộ thông tin cơ bản (server, chứng chỉ), không có nội dung hay dịch vụ đặc biệt mở.
-      + Bảo mật tốt: Chứng chỉ SSL hợp lệ, giao thức HTTPS hỗ trợ chuẩn mới (TLS 1.3).
-      + Ý nghĩa: Kết quả chủ yếu để xác định vị trí và trạng thái máy chủ chứ không phải lỗ hổng.
-- Google có thể index nhầm tài liệu nội bộ (pdf, ppt, visio).
-- Một số truy vấn: site:
-                netflix.com "network diagram"
-                site:netflix.com "architecture diagram"
-                site:netflix.com filetype:pdf "network"
-                site:netflix.com filetype:vsd
-                site:netflix.com "internal use only"
-- Kết quả nhận được: 
-      + Netflix không phụ thuộc hoàn toàn vào các CDN bên thứ ba mà chủ yếu dựa trên Open Connect – một hệ thống CDN riêng.
-      + Kiến trúc mạng của họ dựa vào phân tán nội dung đến gần người dùng, sử dụng máy chủ chuyên dụng và cơ chế điều phối thông minh.
-      + Các tài liệu public giúp hiểu cách thức triển khai và vận hành CDN của Netflix, nhưng không tiết lộ thông tin nhạy cảm.
-- Thu thập subdomain → giúp hình dung cấu trúc hệ thống.
-![image alt](https://github.com/My-Tien1611/InformationGathering_LeThiMyTien_2/blob/09718a7a70eaef5bd2084b686b65942c05b6fd69/SubdomainsNetflix.jpg)
-- Kết quả nhận được:
-      + Hạ tầng hybrid: Kết hợp giữa hệ thống riêng của Netflix (ASN 40027) và dịch vụ cloud của AWS (CloudFront, EC2).
-      + CDN phân tán: Sử dụng Open Connect (CDN riêng) để tối ưu truyền tải phim và CloudFront để phân phối các dịch vụ web công khai.
-      + Phân tách rõ môi trường: Có các subdomain riêng cho production, test/dev, B2B và marketing.
-      + Bảo mật & Proxy: Dùng HTTPS, reverse proxy (Nginx, Envoy) và các lớp bảo mật nhiều tầng.
-      + Cấu trúc domain phản ánh dịch vụ: Các subdomain cho thấy dịch vụ quảng cáo, API nội bộ, cảnh báo, DVD, thử nghiệm,…
-=> Kiến trúc này giúp Netflix đạt hiệu suất cao, khả năng mở rộng và an toàn toàn cầu.
-- Các truy vấn để tìm thông tin rò rỉ trên web: 
-                  site:juice-shop.herokuapp.com intext:@
-                  site:juice-shop.herokuapp.com admin
-- Kết quả ta thu được được file access.log.2025-08-04 và audit.json:
-      + Các dòng log POST /rest/user/login trả HTTP 200 OK cho ta biết được
-| # | Email                | Vai trò (theo mặc định Juice Shop)        |
-|---|----------------------|--------------------------------------------|
-| 1 | `admin@juice-sh.op`  | **Admin (quản trị viên chính)**           |
-| 2 | `jim@juice-sh.op`    | Nhân viên (customer support)              |
-| 3 | `bender@juice-sh.op` | Nhân viên (bot / tester)                  |
-| 4 | `ciso@juice-sh.op`   | Chief Information Security Officer (CISO) |
-| 5 | `emma@juice-sh.op`   | Nhân viên (customer support)              |
-2.2.1.3 Cách khắc phục 
-- Hãy cân nhắc cẩn thận về tính nhạy cảm của thông tin thiết kế và cấu hình trước khi đăng trực tuyến.
-- Định kỳ xem xét độ nhạy của thông tin thiết kế và cấu hình hiện có được đăng trực tuyến.
-2.2.2 Máy chủ web vân tay
-2.2.2.1 Mục tiêu kiểm tra: Xác định phiên bản và loại máy chủ web đang chạy để có thể phát hiện thêm bất kỳ lỗ hổng bảo mật nào đã biết
-2.2.2.2 Các bước thực hiện:
-Bước 1: Sử dụng netcat
-      + nc testphp.vulnweb.com 80 HEAD / HTTP/1.0
-HTTP/1.1 200 OK
-Server: nginx/1.19.0
-Date: Mon, 04 Aug 2025 07:28:28 GMT
-Content-Type: text/html; charset=UTF-8
-Connection: close
-X-Powered-By: PHP/5.6.40-38+ubuntu20.04.1+deb.sury.org+1
-      + nc testphp.vulnweb.com 80 DELETE / HTTP/1.0
-HTTP/1.1 405 Not Allowed
-Server: nginx/1.19.0
-Date: Mon, 04 Aug 2025 07:37:44 GMT
-Content-Type: text/html
-Content-Length: 157
-Connection: close
+Các tham số sau đây đại diện cho hai điểm truy cập vào ứng dụng:https://www.example.com/appx?a=1&b=1**
+- **Trong trường hợp này, ứng dụng hiển thị hai điểm truy cập (tham số avà b). Tất cả các điểm đầu vào được tìm thấy trong giai đoạn này đều đại diện cho một mục tiêu thử nghiệm. Việc theo dõi thư mục hoặc cây lệnh gọi của ứng dụng và tất cả các điểm truy cập có thể hữu ích trong quá trình thử nghiệm đang diễn ra.**
 
-<html>
-<head><title>405 Not Allowed</title></head>
-<body>
-<center><h1>405 Not Allowed</h1></center>
-<hr><center>nginx/1.19.0</center>
-</body>
-</html>
-      + nc testphp.vulnweb.com 80 GET / HTTP/3.0
 
-HTTP/1.1 505 HTTP Version Not Supported
-Server: nginx/1.19.0
-Date: Mon, 04 Aug 2025 07:43:55 GMT
-Content-Type: text/html
-Content-Length: 187
-Connection: close
+---
 
-<html>
-<head><title>505 HTTP Version Not Supported</title></head>
-<body>
-<center><h1>505 HTTP Version Not Supported</h1></center>
-<hr><center>nginx/1.19.0</center>
-</body>
-</html>
-- Từ kết quả đó:
-      + Máy chủ web testphp.vulnweb.com đang sử dụng nginx phiên bản 1.19.0, một phiên bản đã cũ được phát hành từ năm 2020. Trang web này chạy trên nền tảng PHP 5.6.40, là phiên bản đã hết vòng đời và không còn được cập nhật bảo mật, tiềm ẩn nhiều rủi ro.
-      + Máy chủ hỗ trợ các giao thức HTTP/1.0 và HTTP/1.1, nhưng không hỗ trợ HTTP/3.0, dẫn đến lỗi 505 HTTP Version Not Supported nếu gửi yêu cầu với phiên bản đó. Ngoài ra, phương thức HTTP DELETE bị chặn, phản hồi mã lỗi 405 Not Allowed, cho thấy cấu hình server đã hạn chế các phương thức nguy hiểm.
-      + Từ các thông tin này, có thể thấy hệ thống đang sử dụng công nghệ cũ và chưa được cập nhật, cần được xem xét nâng cấp để đảm bảo an toàn và hiệu năng hoạt động.
-Bước 2: Sử dụng công cụ quét tự động: Netcraft , một công cụ trực tuyến quét các trang web để tìm thông tin, bao gồm cả máy chủ web.
-- Máy chủ & Hạ tầng lưu trữ:
-      + Hệ điều hành (OS): Debian Linux
-      + Hạ tầng đám mây (Cloud): Amazon Web Services EC2 (Elastic Compute Cloud) 
-      + Địa chỉ IP: 44.228.249.3
-      + ASN (Autonomous System Number): AS16509 (Amazon.com, Inc.)
-      + Reverse DNS: ec2-44-228-249-3.us-west-2.compute.amazonaws.com
-      + Vị trí server: US West (Oregon) datacenter
-- Công nghệ máy chủ (Server-Side Technology)
-      + PHP Enabled: Server hỗ trợ và đang chạy PHP
-      + Doctype: HTML (Document Type Declaration)
-      + Character Encoding: ISO-8859-2 (Eastern European Latin)
-      + HTTP Compression: Gzip Content Encoding
-      + SSL/TLS: Không hỗ trợ HTTPS (chỉ HTTP) – có thể bị sniffing, MITM
-- Công nghệ phía client (Client-Side Technology)
-      + Adobe Flash: Công nghệ cũ, tiềm ẩn nhiều lỗ hổng bảo mật (RCE)
-      + JavaScript: Được sử dụng để tạo nội dung động trên website
-- Cấu hình bảo mật liên quan (Email & Policy)
-      + SPF Record: Không có (dễ bị giả mạo email – phishing)
-      + DMARC Record: Không có (không kiểm soát xác thực email)
-- Các thông tin khác
-      + Hosting company: Amazon - US West (Oregon) datacenter
-      + Registrar: eurodns.com
-      + Nameserver: ns1.eurodns.com
-      + Tổ chức vận hành: Acunetix Limited (Malta)
-      + Site title: Home of Acunetix Art
-      + Primary Language: English
-2.2.2.3 Cách khắc phục
-- Che giấu thông tin máy chủ web trong tiêu đề, chẳng hạn như với mô-đun mod_headers của Apache.
-- Sử dụng máy chủ proxy ngược được tăng cường để tạo thêm một lớp bảo mật giữa máy chủ web và Internet.
-- Đảm bảo máy chủ web luôn được cập nhật phần mềm và bản vá bảo mật mới nhất.
-2.2.3 Kiểm tra các tệp siêu dữ liệu của máy chủ web để tìm rò rỉ thông tin
-2.2.3.1 Mục tiêu kiểm tra
-- Xác định các đường dẫn và chức năng ẩn hoặc bị che khuất thông qua việc phân tích các tệp siêu dữ liệu.
-- Trích xuất và lập bản đồ các thông tin khác có thể giúp hiểu rõ hơn về các hệ thống hiện có.
-2.2.3.2 Các bước thực hiện:
-Bước 1: Dùng Robots.txt: juice-shop.herokuapp.com/robots.txt
- Kết quả: 
-          User-agent: *
-          Disallow: /ftp
-- User-agent: *: Áp dụng cho tất cả bot tìm kiếm.
-- Disallow: /ftp: Cấm bot truy cập thư mục /ftp
-- /ftp có thể chứa dữ liệu nhạy cảm (backup, mật khẩu, file cấu hình...).
-- Là gợi ý tiềm năng cho hacker trong môi trường Juice Shop (mô phỏng lỗ hổng bảo mật).
-- Cần kiểm tra truy cập trực tiếp hoặc quét thư mục để tìm file ẩn.
-- Truy cập trực tiếp: https://juice-shop.herokuapp.com/ftp
-![image alt](https://github.com/My-Tien1611/InformationGathering_LeThiMyTien_2/blob/3ddd45070efcc5d578066607ca075659854f65e3/ftp.jpg)
-- Directory Listing được bật:
-      + Máy chủ liệt kê toàn bộ nội dung thư mục /ftp.
-      + Cho phép kẻ tấn công xem và tải các file tiềm ẩn dữ liệu nhạy cảm.
-- Một số file nhạy cảm đáng chú ý:
-      + incident-support.kdbx: Có thể là file KeePass chứa mật khẩu (dạng mã hóa).
-      + package.json.bak, package-lock.json.bak: File backup có thể tiết lộ thông tin dependency, version, scripts nguy hiểm.
-      + announcement_encrypted.md, encrypt.pyc: Gợi ý có mã hóa hoặc thông báo ẩn.
-      + coupons_2013.md.bak: Có thể chứa mã giảm giá hoặc thông tin nhạy cảm từ quá khứ.
-      + Thư mục quarantine/: Thường dùng chứa file nghi ngờ/phát hiện có vấn đề.
-Bước 2: Dùng Burpsuite:
-Trang dự định kiểm tra là About Us.Điều này cho thấy ta đã phát hiện ra endpoint /ftp/legal.md khi duyệt web hoặc thông qua phân tích request, dùng Burp để gửi request trực tiếp đến file Markdown này.
-![image alt](https://github.com/My-Tien1611/InformationGathering_LeThiMyTien_2/blob/c6e39f53d053deeafeb9042377ca67a9acb029df/Screenshot%20(1305).png)
-Nhấn forward. Tất cả các tiến trình yêu cầu từ trình duyệt máy khách đến máy chủ sẽ được ghi lại trên HTTP history. Tìm địa chỉ trong cột URL và chọn Send to Repeater
-![image alt](https://github.com/My-Tien1611/InformationGathering_LeThiMyTien_2/blob/d88811f7310e36694ba372eaa0530389870f8b4a/Screenshot%20(1308).png)
-Response trả về một directory listing (liệt kê thư mục), chứa các file:acquisitions.md, announcement_encrypted.md,...
-Điều này cho thấy Directory Listing đang bật → đây là một lỗ hổng bảo mật (Insecure Direct Object Reference / Directory Browsing), vì attacker có thể thấy toàn bộ file bên trong mà không cần xác thực.
-![image alt](https://github.com/My-Tien1611/InformationGathering_LeThiMyTien_2/blob/3eb1fa42df50ef264326e5abcb48e2054636ffbc/Screenshot%20(1310).png)
-Gửi request GET /ftp/acquisitions.md. ** This document is confidential! Do not distribute! ** 
--> Đã khai thác Directory Listing để tìm và đọc được file confidential.
-![image alt](https://github.com/My-Tien1611/InformationGathering_LeThiMyTien_2/blob/4af444353f4a4c8641b506612edf5551b5cfbf24/Screenshot%20(1311).png)
-2.2.4 Liệt kê các ứng dụng trên máy chủ web
-2.2.4.1 Mục tiêu kiểm tra: Liệt kê các ứng dụng trong phạm vi tồn tại trên máy chủ web.
-2.2.4.2 Các bước kiểm tra
-Bước 1: Liệt kê ứng dụng bằng Nmap: nmap testphp.vulnweb.com
-Starting Nmap 7.93 ( https://nmap.org ) at 2025-08-04 12:09 EDT
-Nmap scan report for testphp.vulnweb.com (44.228.249.3)
-Host is up (0.20s latency).
-rDNS record for 44.228.249.3: 3.249.228.44.in-addr.arpa
-Not shown: 999 filtered tcp ports (no-response)
-PORT   STATE SERVICE
-80/tcp open  http
-Nmap done: 1 IP address (1 host up) scanned in 56.69 seconds
-- Kết quả cho thấy:
-      + Hệ thống chỉ để mở một cổng duy nhất (80), có vẻ như đang cố tình giới hạn bề mặt tấn công.
-      + Tuy nhiên, việc sử dụng HTTP không mã hóa (thay vì HTTPS) có thể là điểm yếu, vì dữ liệu truyền đi có thể bị sniff hoặc MITM tấn công.
-- Hiển thị banner dịch vụ: nmap -sV testphp.vulnweb.com
-Starting Nmap 7.93 ( https://nmap.org ) at 2025-08-04 12:11 EDT
-Nmap scan report for testphp.vulnweb.com (44.228.249.3)
-Host is up (0.21s latency).
-rDNS record for 44.228.249.3: ec2-44-228-249-3.us-west-2.compute.amazonaws.com
-Not shown: 999 filtered tcp ports (no-response)
-PORT   STATE SERVICE    VERSION
-80/tcp open  tcpwrapped
-- Kết quả nhận được: Không hiển thị banner HTTP, vì server từ chối hoặc che giấu banner khi Nmap cố lấy thông tin.                                                   
-Bước 2: Liệt kê ứng dụng bằng Netcat: 
-nc testphp.vulnweb.com 80 
-GET / HTTP/1.1
-Host: testphp.vulnweb.com
-- Kết quả cho thấy 
-HTTP/1.1 200 OK
-Server: nginx/1.19.0
-Date: Mon, 04 Aug 2025 16:36:06 GMT
-Content-Type: text/html; charset=UTF-8
-Transfer-Encoding: chunked
-Connection: keep-alive
-X-Powered-By: PHP/5.6.40-38+ubuntu20.04.1+deb.sury.org+1
-      + Server phản hồi: HTTP/1.1 200 OK → Yêu cầu thành công.
-      + Web server: nginx/1.19.0
-      + Ngôn ngữ lập trình phía sau: PHP/5.6.40 (hiển thị trong tiêu đề X-Powered-By)
-      + Hệ thống chạy trên: Ubuntu 20.04 (gợi ý qua chuỗi gói .deb.sury.org)
-      + Phản hồi dùng: Transfer-Encoding: chunked (gửi theo từng phần)
-      + Dịch vụ hoạt động: Ứng dụng web có nội dung HTML đang chạy bình thường.
-Bước 3: Tra cứu DNS: nslookup testphp.vulnweb.com  
-Server:         192.168.198.2
-Address:        192.168.198.2#53
-Non-authoritative answer:
-Name:   testphp.vulnweb.com
-Address: 44.228.249.3
-- Kết quả thu được:
-      + Tên miền testphp.vulnweb.com trỏ về IP 44.228.249.3.
-      + Truy vấn DNS được xử lý qua DNS server nội bộ (192.168.198.2).
-      + Kết quả nhận được là từ DNS trung gian (không phải máy chủ DNS gốc).
-Bước 4: Tra cứu tên miền ngược: dùng viewdns.info
- - Kết quả nhận được chỉ có 1 tên miền được lưu trữ trên máy chủ này: vulnweb.com
-Bước 5: Xác định máy chủ định danh:
-host -t ns vulnweb.com 
-- Kết quả nhận được: 
-vulnweb.com name server ns1.eurodns.com.
-vulnweb.com name server ns2.eurodns.com.
-vulnweb.com name server ns3.eurodns.com.
-vulnweb.com name server ns4.eurodns.com.
-2.2.5 Kiểm tra nội dung trang web để phát hiện rò rỉ thông tin
-2.2.5.1 Mục tiêu kiểm tra:
-- Xem lại các bình luận và siêu dữ liệu trên trang web để tìm bất kỳ thông tin rò rỉ nào.
-- Thu thập các tệp JavaScript và xem xét mã JS để hiểu rõ hơn về ứng dụng và tìm ra bất kỳ thông tin rò rỉ nào.
-- Xác định xem có tồn tại tệp bản đồ nguồn hoặc tệp gỡ lỗi giao diện khác không.
-2.2.5.3 Các bước thực hiện: Dùng BurpSuite
-- Trang web công khai username: test và password: test mặc định → rất dễ bị khai thác.
-![image alt](https://github.com/My-Tien1611/InformationGathering_LeThiMyTien_2/blob/ca53c7ed3b6bc641fd20b4908ec541c052617c85/Thongttindn.jpg)
-- Có đoạn comment này tiết lộ cấu trúc template nội bộ, dễ giúp attacker xây dựng tấn công chính xác hơn.
-![image alt](https://github.com/My-Tien1611/InformationGathering_LeThiMyTien_2/blob/26b8836a962545277d5f1a1a029aba30142e050a/Screenshot%20(1298).png)
-- <form name="loginform" method="post" action="userinfo.php">
-Tệp JavaScript, form POST, endpoint -> Quan trọng để thực hiện tấn công brute-force, SQLi, hoặc credential stuffing.
-2.2.6 Xác định điểm vào ứng dụng
-2.2.6.1 Mục tiêu kiểm tra: Xác định các điểm xâm nhập và điểm tiêm nhiễm có thể xảy ra thông qua phân tích yêu cầu và phản hồi.
-2.2.6.2 Các bước thực hiện
-- Xác định phương thức GET và POST khi nào được sử dụng
-![image alt](https://github.com/My-Tien1611/InformationGathering_LeThiMyTien_2/blob/d84204b6e8d3a136f5f614319c41ecc13af8ebe9/POST.jpg)
-![image alt](https://github.com/My-Tien1611/InformationGathering_LeThiMyTien_2/blob/530206f8fdf7aeece16b83d65a8a3e46aea021bd/GET.png)
-- Phương thức POST được sử dụng khi người dùng gửi dữ liệu nhập vào (form) đến server.
-      + Dữ liệu được gửi qua body của request: searchFor=hello&goButton=go
-      + POST thường dùng khi: Gửi form (đăng nhập, tìm kiếm, đăng ký, v.v.), Tránh hiển thị dữ liệu trong URL, Truyền dữ liệu lớn hoặc nhạy cảm
-- Phương thức GET được dùng để yêu cầu dữ liệu từ server (hiển thị trang web).
-      + Không có dữ liệu trong phần body.
-      + Các tham số (nếu có) thường nằm trực tiếp trên URL (ví dụ: /page.php?id=3)
-      + GET thường dùng khi: Truy cập/truy vấn dữ liệu, Duyệt trang, tải thông tin tĩnh, Không làm thay đổi trạng thái hệ thống
-2.2.7 Thực thi đường dẫn thông qua ứng dụng
-2.2.7.1 Mục tiêu kiểm tra: Lập bản đồ ứng dụng mục tiêu và hiểu các quy trình công việc chính.
-2.2.7.2 Các bước thực hiện
-Bước 1 Thêm vào Scope và khởi động Spider
-![image alt](https://github.com/My-Tien1611/InformationGathering_LeThiMyTien_2/blob/115c21743e2d383c4f23d0ade2f3ac7c42e44fad/Screenshot%20(1312).png)
-- Vào tab Target → Site map → URL view.
-- Chọn host testphp.vulnweb.com để xem chi tiết:
-      + Contents: Danh sách URL, phương thức (GET/POST), params, status code, độ dài response, MIME type, tiêu đề trang.
-      + Request / Response: Nội dung chi tiết HTTP request và response.
-Bước 2: Xem cấu trúc cây (site map) các đường dẫn của website đã crawl được
-Sau khi thu thập URL bằng Spider hoặc manual browsing.Chuyển sang Crawl paths view trong tab Target.Khi click vào từng node, Burp hiển thị HTTP messages, Issues, và Outlinks.
-![image alt](https://github.com/My-Tien1611/InformationGathering_LeThiMyTien_2/blob/115c21743e2d383c4f23d0ade2f3ac7c42e44fad/Screenshot%20(1313).png)
-- Kết quả nhận được: 
-      + Burp đã xác định được toàn bộ cấu trúc đường dẫn của site.
-      + Một số đường dẫn là danh mục sản phẩm (categories), một số là chức năng (login, signup, your profile).
-      + Mỗi node có thể mở ra để xem request/response chi tiết.
-      + Đây là kết quả của quá trình mapping (lập bản đồ) ứng dụng web.
-2.2.8 Khung ứng dụng web vân tay 
-2.2.8.1 Mục tiêu kiểm tra: Lấy dấu vân tay các thành phần được ứng dụng web sử dụng.
-2.2.8.2 Các bước thực hiện
-Bước 1: Fingerprint Web Application Framework
-![image alt](https://github.com/My-Tien1611/InformationGathering_LeThiMyTien_2/blob/6a8305baca1438013e24cf531fb67c5c008e37ad/Screenshot%20(1314).png)
-Kết quả nhận được: Ngôn ngữ: PHP, Phiên bản PHP: 5.6.40, Hệ điều hành: Ubuntu 20.04,Nguồn build: kho deb.sury.org
--> Website chạy PHP, Bản PHP rất cũ (5.6, đã hết hỗ trợ), tiềm ẩn nhiều lỗ hổng bảo mật.
-Bước 2: Fingerprint Web Application
-![image alt](https://github.com/My-Tien1611/InformationGathering_LeThiMyTien_2/blob/6a8305baca1438013e24cf531fb67c5c008e37ad/Screenshot%20(1315).png)
-- Ứng dụng được phát triển bằng PHP.
-- Giao diện và mã lệnh lỗi thời, dựa trên công nghệ cũ như HTML 4.01, Flash, JavaScript cổ.
-- Thiết kế bởi Adobe Dreamweaver – công cụ thiết kế web WYSIWYG.
-- Đây là ứng dụng mô phỏng, chứa lỗ hổng bảo mật có chủ đích để người dùng thực hành pentest.
-- Có nhiều chức năng dễ khai thác, phù hợp cho kiểm thử bảo mật như SQLi, XSS, CSRF, LFI,...
-Bước 3: Dùng tool:wappalyzer
-![image alt](https://github.com/My-Tien1611/InformationGathering_LeThiMyTien_2/blob/cd11cd95739ed8f701b1425df88fc1330033aae2/Screenshot%20(1317).png)
-2.2.9 Kiến trúc ứng dụng bản đồ
-2.2.9.1 Mục tiêu kiểm tra: Tạo bản đồ ứng dụng hiện tại dựa trên nghiên cứu đã tiến hành.
-2.2.9.2 Các bước thực hiện
-Bước 1: Phân tích tiêu đề HTTP: curl -I https://juice-shop.herokuapp.com/
-                    HTTP/1.1 200 OK
-                    Accept-Ranges: bytes
-                    Access-Control-Allow-Origin: *
-                    Cache-Control: public, max-age=0
-                    Content-Length: 80117
-                    Content-Type: text/html; charset=UTF-8
-                    Date: Tue, 05 Aug 2025 04:20:22 GMT
-                    Etag: W/"138f5-19878707b21"
-                    Feature-Policy: payment 'self'
-                    Last-Modified: Tue, 05 Aug 2025 04:14:54 GMT
-                    Nel: {"report_to":"heroku-nel","response_headers":["Via"],"max_age":3600,"success_fraction":0.01,"failure_fraction":0.1}
-                    Report-To: {"group":"heroku-nel","endpoints":[{"url":"https://nel.heroku.com/reports?s=4SVqm5acgeqm%2BdCg1SSYEHfMVqyJ0%2BcwyyOP2qjnMgk%3D\u0026sid=812dcc77-0bd0-43b1-a5f1-b25750382959\u0026ts=1754367622"}],"max_age":3600}
-                    Reporting-Endpoints: heroku-nel="https://nel.heroku.com/reports?s=4SVqm5acgeqm%2BdCg1SSYEHfMVqyJ0%2BcwyyOP2qjnMgk%3D&sid=812dcc77-0bd0-43b1-a5f1-b25750382959&ts=1754367622"
-                    Server: Heroku
-                    Vary: Accept-Encoding
-                    Via: 1.1 heroku-router
-                    X-Content-Type-Options: nosniff
-                    X-Frame-Options: SAMEORIGIN
-                    X-Recruiting: /#/jobs
-Bước 2: Kiểm tra phương thức HTTP được hỗ trợ: curl -X OPTIONS https://juice-shop.herokuapp.com/ -i
-                    HTTP/1.1 204 No Content
-                    Access-Control-Allow-Methods: GET,HEAD,PUT,PATCH,POST,DELETE
-                    Access-Control-Allow-Origin: *
-                    Date: Tue, 05 Aug 2025 04:20:45 GMT
-                    Nel: {"report_to":"heroku-nel","response_headers":["Via"],"max_age":3600,"success_fraction":0.01,"failure_fraction":0.1}
-                    Report-To: {"group":"heroku-nel","endpoints":[{"url":"https://nel.heroku.com/reports?s=FGpAhyGyejyMUvb%2FlGRw6xtTG8xlxUNK%2FecPnly%2FGR4%3D\u0026sid=812dcc77-0bd0-43b1-a5f1-b25750382959\u0026ts=1754367645"}],"max_age":3600}
-                    Reporting-Endpoints: heroku-nel="https://nel.heroku.com/reports?s=FGpAhyGyejyMUvb%2FlGRw6xtTG8xlxUNK%2FecPnly%2FGR4%3D&sid=812dcc77-0bd0-43b1-a5f1-b25750382959&ts=1754367645"
-                    Server: Heroku
-                    Vary: Access-Control-Request-Headers
-                    Via: 1.1 heroku-router
-Bước 3: Kiểm tra reverse proxy hoặc WAF:curl "https://juice-shop.herokuapp.com/' OR '1'='1"
-curl: (3) URL rejected: Malformed input to a URL function
-Kết quả nhận được: 
-- Ứng dụng triển khai trên Heroku (PaaS).
-- Sử dụng Reverse Proxy (thể hiện qua header Via: heroku-router).
-- Có khả năng dùng Load Balancer (đặc điểm mặc định của Heroku).
-- Không thấy WAF rõ ràng, không có dấu hiệu chặn payload.
-- Ứng dụng có kết nối với Cơ sở dữ liệu back-end (sản phẩm, review, CRUD).
-- Giao diện viết bằng Angular (Front-end framework).
-- Back-end dùng Node.js + Express (theo tài liệu OWASP Juice Shop).
-- Hỗ trợ đầy đủ các phương thức REST API (GET, POST, PUT, PATCH, DELETE).
+## 2. 🛠️ Cách thực hiện kiểm thử thủ công
+
+---
+
+### 2.1 Trinh sát với công cụ tìm kiếm
+
+#### 🎯 Mục tiêu
+Xác định thông tin nhạy cảm lộ qua website chính hoặc bên thứ ba.
+
+#### 🧪 Công cụ & Truy vấn
+
+- **Công cụ:** Shodan, Google Dorks, dnsdumpster
+- **Truy vấn ví dụ với Netflix:**
