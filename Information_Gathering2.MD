@@ -163,6 +163,8 @@ Bước 1: Dùng Robots.txt: juice-shop.herokuapp.com/robots.txt
       + coupons_2013.md.bak: Có thể chứa mã giảm giá hoặc thông tin nhạy cảm từ quá khứ.
       + Thư mục quarantine/: Thường dùng chứa file nghi ngờ/phát hiện có vấn đề.
 Bước 2: Dùng Burpsuite:
+Trang dự định kiểm tra là About Us.Điều này cho thấy ta đã phát hiện ra endpoint /ftp/legal.md khi duyệt web hoặc thông qua phân tích request, dùng Burp để gửi request trực tiếp đến file Markdown này.
+!
 2.2.4 Liệt kê các ứng dụng trên máy chủ web
 2.2.4.1 Mục tiêu kiểm tra: Liệt kê các ứng dụng trong phạm vi tồn tại trên máy chủ web.
 2.2.4.2 Các bước kiểm tra
