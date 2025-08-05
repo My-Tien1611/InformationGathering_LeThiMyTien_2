@@ -8,8 +8,6 @@
 
 ## 📑 Mục lục
 
-## 📑 Mục lục
-
 1. [🎯 Mục tiêu thu thập thông tin](#1-🎯-mục-tiêu-thu-thập-thông-tin)  
 2. [🛠️ Cách thực hiện kiểm thử thủ công](#2-🛠️-cách-thực-hiện-kiểm-thử-thủ-công)  
     2.1 [🔍 Trinh sát với công cụ tìm kiếm](#21-🔍-trinh-sát-với-công-cụ-tìm-kiếm)  
