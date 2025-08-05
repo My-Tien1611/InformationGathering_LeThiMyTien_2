@@ -169,7 +169,7 @@ Nhấn forward. Tất cả các tiến trình yêu cầu từ trình duyệt má
 ![image alt](https://github.com/My-Tien1611/InformationGathering_LeThiMyTien_2/blob/d88811f7310e36694ba372eaa0530389870f8b4a/Screenshot%20(1308).png)
 Response trả về một directory listing (liệt kê thư mục), chứa các file:acquisitions.md, announcement_encrypted.md,...
 Điều này cho thấy Directory Listing đang bật → đây là một lỗ hổng bảo mật (Insecure Direct Object Reference / Directory Browsing), vì attacker có thể thấy toàn bộ file bên trong mà không cần xác thực.
-![image alt](https://github.com/My-Tien1611/InformationGathering_LeThiMyTien_2/blob/c6e39f53d053deeafeb9042377ca67a9acb029df/Screenshot%20(1310).png)
+![image alt](https://github.com/My-Tien1611/InformationGathering_LeThiMyTien_2/blob/3eb1fa42df50ef264326e5abcb48e2054636ffbc/Screenshot%20(1310).png)
 Gửi request GET /ftp/acquisitions.md. ** This document is confidential! Do not distribute! ** 
 -> Đã khai thác Directory Listing để tìm và đọc được file confidential.
 ![image alt](https://github.com/My-Tien1611/InformationGathering_LeThiMyTien_2/blob/c6e39f53d053deeafeb9042377ca67a9acb029df/Screenshot%20(1311).png)
