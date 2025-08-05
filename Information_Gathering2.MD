@@ -164,7 +164,15 @@ Bước 1: Dùng Robots.txt: juice-shop.herokuapp.com/robots.txt
       + Thư mục quarantine/: Thường dùng chứa file nghi ngờ/phát hiện có vấn đề.
 Bước 2: Dùng Burpsuite:
 Trang dự định kiểm tra là About Us.Điều này cho thấy ta đã phát hiện ra endpoint /ftp/legal.md khi duyệt web hoặc thông qua phân tích request, dùng Burp để gửi request trực tiếp đến file Markdown này.
-!
+![image alt](https://github.com/My-Tien1611/InformationGathering_LeThiMyTien_2/blob/c6e39f53d053deeafeb9042377ca67a9acb029df/Screenshot%20(1305).png)
+Nhấn forward. Tất cả các tiến trình yêu cầu từ trình duyệt máy khách đến máy chủ sẽ được ghi lại trên HTTP history. Tìm địa chỉ trong cột URL và chọn Send to Repeater
+![image alt](https://github.com/My-Tien1611/InformationGathering_LeThiMyTien_2/blob/c6e39f53d053deeafeb9042377ca67a9acb029df/Screenshot%20(1308).png)
+Response trả về một directory listing (liệt kê thư mục), chứa các file:acquisitions.md, announcement_encrypted.md,...
+Điều này cho thấy Directory Listing đang bật → đây là một lỗ hổng bảo mật (Insecure Direct Object Reference / Directory Browsing), vì attacker có thể thấy toàn bộ file bên trong mà không cần xác thực.
+![image alt](https://github.com/My-Tien1611/InformationGathering_LeThiMyTien_2/blob/c6e39f53d053deeafeb9042377ca67a9acb029df/Screenshot%20(1310).png)
+Gửi request GET /ftp/acquisitions.md. ** This document is confidential! Do not distribute! ** 
+-> Đã khai thác Directory Listing để tìm và đọc được file confidential.
+![image alt](https://github.com/My-Tien1611/InformationGathering_LeThiMyTien_2/blob/c6e39f53d053deeafeb9042377ca67a9acb029df/Screenshot%20(1311).png)
 2.2.4 Liệt kê các ứng dụng trên máy chủ web
 2.2.4.1 Mục tiêu kiểm tra: Liệt kê các ứng dụng trong phạm vi tồn tại trên máy chủ web.
 2.2.4.2 Các bước kiểm tra
