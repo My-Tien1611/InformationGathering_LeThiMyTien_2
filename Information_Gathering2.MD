@@ -8,17 +8,20 @@
 
 ## 📑 Mục lục
 
-1. [Mục tiêu thu thập thông tin](#1-mục-tiêu-thu-thập-thông-tin)
-2. [Cách thực hiện kiểm thử thủ công](#2-cách-thực-hiện-kiểm-thử-thủ-công)
-    - [2.1 Trinh sát với công cụ tìm kiếm](#21-trinh-sát-với-công-cụ-tìm-kiếm)
-    - [2.2 Web server fingerprinting](#22-web-server-fingerprinting)
-    - [2.3 Phân tích tệp metadata](#23-phân-tích-tệp-metadata)
-    - [2.4 Liệt kê ứng dụng trên máy chủ web](#24-liệt-kê-ứng-dụng-trên-máy-chủ-web)
-    - [2.5 Kiểm tra nội dung website](#25-kiểm-tra-nội-dung-website)
-    - [2.6 Xác định điểm vào ứng dụng](#26-xác-định-điểm-vào-ứng-dụng)
-    - [2.7 Thực thi đường dẫn ứng dụng](#27-thực-thi-đường-dẫn-ứng-dụng)
-    - [2.8 Web Application Framework Fingerprinting](#28-web-application-framework-fingerprinting)
-    - [2.9 Lập bản đồ kiến trúc ứng dụng](#29-lập-bản-đồ-kiến-trúc-ứng-dụng)
+## 📑 Mục lục
+
+1. [🎯 Mục tiêu thu thập thông tin](#1-🎯-mục-tiêu-thu-thập-thông-tin)  
+2. [🛠️ Cách thực hiện kiểm thử thủ công](#2-🛠️-cách-thực-hiện-kiểm-thử-thủ-công)  
+    2.1 [🔍 Trinh sát với công cụ tìm kiếm](#21-🔍-trinh-sát-với-công-cụ-tìm-kiếm)  
+    2.2 [🧬 Web Server Fingerprinting](#22-🧬-web-server-fingerprinting)  
+    2.3 [🗂️ Phân tích tệp metadata](#23-🗂️-phân-tích-tệp-metadata)  
+    2.4 [🌐 Liệt kê ứng dụng trên máy chủ web](#24-🌐-liệt-kê-ứng-dụng-trên-máy-chủ-web)  
+    2.5 [🕵️‍♂️ Kiểm tra nội dung website](#25-🕵️‍♂️-kiểm-tra-nội-dung-website)  
+    2.6 [🎯 Xác định điểm vào ứng dụng](#26-🎯-xác-định-điểm-vào-ứng-dụng)  
+    2.7 [🗺️ Thực thi đường dẫn ứng dụng](#27-🗺️-thực-thi-đường-dẫn-ứng-dụng)  
+    2.8 [🧬 Framework Fingerprinting](#28-🧬-framework-fingerprinting)  
+    2.9 [📡 Bản đồ kiến trúc ứng dụng](#29-📡-bản-đồ-kiến-trúc-ứng-dụng)
+
 
 ---
 
