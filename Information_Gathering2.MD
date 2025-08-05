@@ -262,4 +262,22 @@ Tệp JavaScript, form POST, endpoint -> Quan trọng để thực hiện tấn 
 2.2.7 Thực thi đường dẫn thông qua ứng dụng
 2.2.7.1 Mục tiêu kiểm tra: Lập bản đồ ứng dụng mục tiêu và hiểu các quy trình công việc chính.
 2.2.7.2 Các bước thực hiện
-Bước 1 Thêm vào Scope và khởi đ
+Bước 1 Thêm vào Scope và khởi động Spider
+![image alt](https://github.com/My-Tien1611/InformationGathering_LeThiMyTien_2/blob/115c21743e2d383c4f23d0ade2f3ac7c42e44fad/Screenshot%20(1312).png)
+- Vào tab Target → Site map → URL view.
+- Chọn host testphp.vulnweb.com để xem chi tiết:
+      + Contents: Danh sách URL, phương thức (GET/POST), params, status code, độ dài response, MIME type, tiêu đề trang.
+      + Request / Response: Nội dung chi tiết HTTP request và response.
+Bước 2: Xem cấu trúc cây (site map) các đường dẫn của website đã crawl được
+Sau khi thu thập URL bằng Spider hoặc manual browsing.Chuyển sang Crawl paths view trong tab Target.Khi click vào từng node, Burp hiển thị HTTP messages, Issues, và Outlinks.
+![image alt](https://github.com/My-Tien1611/InformationGathering_LeThiMyTien_2/blob/115c21743e2d383c4f23d0ade2f3ac7c42e44fad/Screenshot%20(1313).png)
+- Kết quả nhận được: 
+      + Burp đã xác định được toàn bộ cấu trúc đường dẫn của site.
+      + Một số đường dẫn là danh mục sản phẩm (categories), một số là chức năng (login, signup, your profile).
+      + Mỗi node có thể mở ra để xem request/response chi tiết.
+      + Đây là kết quả của quá trình mapping (lập bản đồ) ứng dụng web.
+2.2.8 Khung ứng dụng web vân tay
+2.2.8.1 Mục tiêu kiểm tra: Lấy dấu vân tay các thành phần được ứng dụng web sử dụng.
+2.2.8.2 Các bước thực hiện
+Bước 1: Fingerprint Web Application Framework
+![
